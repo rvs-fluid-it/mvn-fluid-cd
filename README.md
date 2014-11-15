@@ -10,7 +10,9 @@ Maven extension(s) to ease continuously delivering microservices
 (Anno 2014)
 
 * [Technology radar Oktober 2012 - Thoughtworks](http://www.thoughtworks.com/radar/tools/maven)
+
 > Maven has long been a staple of build automation in the Java space. However, given its lack of flexibility and support for automation best practices, especially in the Continuous Delivery domain, the use of alternatives such as Gradle should be considered.
+
 * [Evil (Maven) Snapshots - Halil-Cem Gürsoy](http://bed-con.org/2014/files/slides/evil_snapshots-bedcon2014.pdf) 
 
 ## As Is (Anno 2014)
