@@ -5,7 +5,7 @@ Maven extension(s) to facilitate continuously delivering microservices
 
 ## Problem statement
 
-> Continuously delivering microservices build by Maven is tough and painfull. 
+> Continuously delivering [microservices](http://martinfowler.com/articles/microservices.html) build by Maven is tough and painfull. 
 
 (Anno 2014)
 
@@ -23,12 +23,12 @@ Maven extension(s) to facilitate continuously delivering microservices
 
 ## Bringing back the joy
 * Requirements gathering
-  * Dev
+  * Dave Dev says:
     * _Let me use my snapshots and for the rest stay out of my way ..._ 
-  * Ops
-    * _Freeze! And no adding a revision number or hash in a manifest file is not good enough ..._
-  * Jenkins
-    * _Keep It Simple Stupid ..._
+  * Oliver Ops says:
+    * _Freeze! And no adding a revision number in a manifest file is not good enough ..._
+  * Jerry Jenkins
+    * _I'll do it for you but Keep It Simple Stupid ..._
   * ...
 * Scope
   * Java/JVM
