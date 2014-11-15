@@ -14,7 +14,7 @@ Maven extension to ease continuously delivering microservices
 ## As is (End 2014)
 * [... MNG-xxx - Jason Van Zyl]()
 * [Real-world strategies for continuous delivery with Maven and Jenkins - John Ferguson Smart](http://www.slideshare.net/wakaleo/continuous-deliverywithmaven)
-* [Takari generations - Jason Van Zyl](http://www.slideshare.net/wakaleo/continuous-deliverywithmaven)
+* [Takari generations - Jason Van Zyl](http://www.slideshare.net/Takari_io/takari-1)
 
 
 ## Bringing back the joy
