@@ -12,9 +12,9 @@ Maven extension to ease continuously delivering microservices
 
 
 ## As is (End 2014)
-* [... MNG-xxx - Jason Van Zyl]()
+* [Continuous delivery friendly Maven versions (MNG-5576) -> Fixed - Jason van Zyl](https://jira.codehaus.org/browse/MNG-5576)
 * [Real-world strategies for continuous delivery with Maven and Jenkins - John Ferguson Smart](http://www.slideshare.net/wakaleo/continuous-deliverywithmaven)
-* [Takari generations - Jason Van Zyl](http://www.slideshare.net/Takari_io/takari-1)
+* [Takari generations - Jason van Zyl](http://www.slideshare.net/Takari_io/takari-1)
 
 
 ## Bringing back the joy
