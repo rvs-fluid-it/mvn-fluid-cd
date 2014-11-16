@@ -2,7 +2,19 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>be.fluid.tools.mvn.cd</groupId>
+  <parent>
+    <groupId>be.fluid.tools.mvn.cd</groupId>
+    <artifactId>mvn-ext-parent</artifactId>
+    <version>0.1-SNAPSHOT</version>
+    <relativePath>../mvn-ext-parent/pom.xml</relativePath>
+  </parent>
   <artifactId>mvn-ext-facets</artifactId>
-  <version>0.1-SNAPSHOT</version>
+  <dependencies>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>mvn-ext-s</artifactId>
+      <version>${project.version}</version>
+      <scope>provided</scope>
+    </dependency>
+  </dependencies>
 </project>
