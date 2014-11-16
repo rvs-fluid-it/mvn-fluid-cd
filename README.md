@@ -5,7 +5,7 @@ Maven extension(s) to facilitate continuously delivering microservices
 
 ## Problem statement
 
-> Continuously delivering [microservices](http://martinfowler.com/articles/microservices.html) built by Maven is tough and painfull. 
+> Continuously delivering [microservices](http://martinfowler.com/articles/microservices.html) built by Maven is tough and painful. 
 
 (Anno 2014)
 
