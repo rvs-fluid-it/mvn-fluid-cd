@@ -1,9 +1,8 @@
 package be.fluid.mvn.cd.x.multi;
 
-import java.util.List;
+import java.util.Set;
 
 public interface ExtensionRegistry {
-    void register(String hint);
-    List<String> asList();
+    Set<String> asSet();
     String asText();
 }

@@ -9,12 +9,4 @@
     <relativePath>../mvn-ext-parent/pom.xml</relativePath>
   </parent>
   <artifactId>mvn-ext-steps</artifactId>
-  <dependencies>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>mvn-ext-s</artifactId>
-      <version>${project.version}</version>
-      <scope>provided</scope>
-    </dependency>
-  </dependencies>
 </project>

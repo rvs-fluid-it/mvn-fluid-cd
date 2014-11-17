@@ -1,30 +1,31 @@
 package be.fluid.mvn.cd.x.multi;
 
+import org.apache.maven.AbstractMavenLifecycleParticipant;
 import org.codehaus.plexus.component.annotations.Component;
+import org.codehaus.plexus.component.annotations.Requirement;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 @Component( role = ExtensionRegistry.class )
 public class DefaultExtensionRegistry implements ExtensionRegistry {
-    private final List<String> hints = new LinkedList<String>();
 
     @Override
-    public void register(String hint) {
-        hints.add(hint);
+    public Set<String> asSet() {
+        return extensionMap.keySet();
     }
 
-    @Override
-    public List<String> asList() {
-        return hints;
-    }
+    @Requirement (role = AbstractMavenLifecycleParticipant.class )
+    public Map<String, AbstractMavenLifecycleParticipant> extensionMap;
 
     @Override
     public String asText() {
         StringBuffer buffer = new StringBuffer();
         buffer.append("[");
         boolean first = true;
-        for (String hint : hints) {
+        for (String hint : extensionMap.keySet()) {
             if (first) {
                 first = false;
             } else {
