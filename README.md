@@ -38,3 +38,5 @@ Maven extension(s) to facilitate continuously delivering microservices
 * Solution
   * Bunch of Maven extensions
   * Stay tuned ...
+  * Links
+    * [Plexus Container Five Minute Tutorial](http://blog.sonatype.com/2009/05/plexus-container-five-minute-tutorial)
