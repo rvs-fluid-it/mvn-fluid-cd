@@ -39,4 +39,5 @@ Maven extension(s) to facilitate continuously delivering microservices
   * Bunch of Maven extensions
   * Stay tuned ...
   * Links
+    * [Creating a Custom Build Extension for Maven 3.0 - Bret Porter](https://brettporter.wordpress.com/2010/10/05/creating-a-custom-build-extension-for-maven-3-0/)
     * [Plexus Container Five Minute Tutorial](http://blog.sonatype.com/2009/05/plexus-container-five-minute-tutorial)
