@@ -13,7 +13,7 @@ import java.io.StringBufferInputStream;
 public class DefaultArtifactFreezeMappingTest {
 
     public static final String GROUP_ID = "be.fluid.tools.mvn.cd";
-    public static final String ARTIFACT_ID = "sample-arifact-id";
+    public static final String ARTIFACT_ID = "sample-artifact-id";
     public static final String VERSION_PREFIX = "0.1";
     public static final String VERSION = VERSION_PREFIX + "-SNAPSHOT";
     public static final String REVISION = "123";
