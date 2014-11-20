@@ -68,4 +68,10 @@ public class GroupIdArtifactIdVersionPrefix {
         result = 31 * result + (versionPrefix != null ? versionPrefix.hashCode() : 0);
         return result;
     }
+
+    @Override
+    public String toString() {
+        return groupId + ":" + artifactId + ":" + versionPrefix;
+    }
+
 }
