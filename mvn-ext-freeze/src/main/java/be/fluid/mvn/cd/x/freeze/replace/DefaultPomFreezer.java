@@ -1,5 +1,6 @@
 package be.fluid.mvn.cd.x.freeze.replace;
 
+import be.fluid.mvn.cd.x.freeze.FreezeException;
 import be.fluid.mvn.cd.x.freeze.resolve.FrozenArtifactResolver;
 import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.component.annotations.Requirement;
@@ -24,32 +25,36 @@ public class DefaultPomFreezer implements PomFreezer {
     @Requirement
     private FrozenArtifactResolver frozenArtifactResolver;
 
+    // Plexus
     public DefaultPomFreezer() {
     }
-
-    public DefaultPomFreezer(FrozenArtifactResolver frozenArtifactResolver) {
+    // Testing
+    DefaultPomFreezer(FrozenArtifactResolver frozenArtifactResolver, Logger logger) {
         this.frozenArtifactResolver = frozenArtifactResolver;
+        this.logger = logger;
     }
 
     public void freeze(InputStream pomInputStream, OutputStream outputStream) {
         try {
             SAXParser saxParser = factory.newSAXParser();
-            DefaultHandler handler = new FreezeHandler(outputStream, frozenArtifactResolver);
+            DefaultHandler handler = new FreezeHandler(outputStream, frozenArtifactResolver, logger);
             saxParser.parse(pomInputStream, handler);
         } catch (ParserConfigurationException e) {
-            e.printStackTrace();
+            throw new FreezeException("Unable to parse pom", e);
         } catch (SAXException e) {
-            e.printStackTrace();
+            throw new FreezeException("Unable to parse pom", e);
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new FreezeException("Unable to parse pom", e);
         }
     }
 
     @Override
     public File freeze(File pomFile) {
+        logger.debug("[PomFreezer]: Freeze pom [" + pomFile.getAbsolutePath() + "] ...");
         try {
             File frozenPomFile = new File(pomFile.getParentFile(), FROZEN_POM_FILE);
             freeze(new FileInputStream(pomFile), new FileOutputStream(frozenPomFile));
+            logger.debug("[PomFreezer]: Frozen pom location: [" + pomFile.getAbsolutePath() + "]");
             return frozenPomFile;
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);

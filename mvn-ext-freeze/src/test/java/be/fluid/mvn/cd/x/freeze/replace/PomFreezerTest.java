@@ -4,6 +4,7 @@ import be.fluid.mvn.cd.x.freeze.model.GroupIdArtifactIdVersion;
 import be.fluid.mvn.cd.x.freeze.model.GroupIdArtifactIdVersionPrefix;
 import be.fluid.mvn.cd.x.freeze.pom.SamplePom;
 import be.fluid.mvn.cd.x.freeze.resolve.FrozenArtifactResolver;
+import org.codehaus.plexus.logging.console.ConsoleLogger;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -25,7 +26,7 @@ public class PomFreezerTest {
         };
 
         ByteArrayOutputStream pomOutputStream = new ByteArrayOutputStream();
-        new DefaultPomFreezer(frozenArtifactResolverDummy).freeze(SamplePom.asStream(), pomOutputStream);
+        new DefaultPomFreezer(frozenArtifactResolverDummy, new ConsoleLogger()).freeze(SamplePom.asStream(), pomOutputStream);
         String pomContent = pomOutputStream.toString();
         System.out.print(pomContent);
         Assert.assertTrue(pomContent.contains("<version>" + SamplePom.FROZEN_VERSION + "</version>"));

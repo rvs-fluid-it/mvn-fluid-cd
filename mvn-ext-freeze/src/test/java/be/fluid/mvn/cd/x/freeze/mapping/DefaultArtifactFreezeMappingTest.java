@@ -3,6 +3,7 @@ package be.fluid.mvn.cd.x.freeze.mapping;
 import be.fluid.mvn.cd.x.freeze.model.GroupIdArtifactIdVersion;
 import be.fluid.mvn.cd.x.freeze.model.GroupIdArtifactIdVersionPrefix;
 import be.fluid.mvn.cd.x.freeze.pom.SamplePom;
+import org.codehaus.plexus.logging.console.ConsoleLogger;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -21,7 +22,7 @@ public class DefaultArtifactFreezeMappingTest {
 
     @Test
     public void testReadingPom() {
-        DefaultArtifactFreezeMapping mapping = new DefaultArtifactFreezeMapping();
+        DefaultArtifactFreezeMapping mapping = new DefaultArtifactFreezeMapping(new ConsoleLogger());
 
         mapping.put(REVISION, SamplePom.asStream());
         Assert.assertTrue(mapping.contains(SamplePom.groupIdArtifactIdVersionPrefix()));

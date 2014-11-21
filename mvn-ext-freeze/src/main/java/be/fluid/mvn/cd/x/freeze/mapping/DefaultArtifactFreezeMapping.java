@@ -3,6 +3,8 @@ package be.fluid.mvn.cd.x.freeze.mapping;
 import be.fluid.mvn.cd.x.freeze.model.GroupIdArtifactIdVersion;
 import be.fluid.mvn.cd.x.freeze.model.GroupIdArtifactIdVersionPrefix;
 import org.codehaus.plexus.component.annotations.Component;
+import org.codehaus.plexus.component.annotations.Requirement;
+import org.codehaus.plexus.logging.Logger;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
@@ -21,6 +23,17 @@ import static be.fluid.mvn.cd.x.freeze.model.KnownElementNames.*;
 public class DefaultArtifactFreezeMapping implements ArtifactFreezeMapping {
     private final Map<GroupIdArtifactIdVersionPrefix, GroupIdArtifactIdVersion> mapping = new HashMap<GroupIdArtifactIdVersionPrefix, GroupIdArtifactIdVersion>();
 
+    @Requirement
+    private Logger logger;
+
+    // PLexus
+    public DefaultArtifactFreezeMapping() {
+    }
+    // Testing
+    DefaultArtifactFreezeMapping(Logger logger) {
+        this.logger = logger;
+    }
+
     @Override
     public boolean contains(GroupIdArtifactIdVersionPrefix groupIdArtifactIdVersionPrefix) {
         return mapping.containsKey(groupIdArtifactIdVersionPrefix);
@@ -34,6 +47,10 @@ public class DefaultArtifactFreezeMapping implements ArtifactFreezeMapping {
     @Override
     public void put(GroupIdArtifactIdVersionPrefix groupIdArtifactIdVersionPrefix, GroupIdArtifactIdVersion groupIdArtifactIdVersion) {
         mapping.put(groupIdArtifactIdVersionPrefix, groupIdArtifactIdVersion);
+        logger.info("[ArtifactFreezeMapping]: Add " +
+                groupIdArtifactIdVersionPrefix +
+                " -> " +
+                groupIdArtifactIdVersion);
     }
 
     public void put(String revision, InputStream pomStream) {

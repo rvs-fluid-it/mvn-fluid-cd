@@ -1,1 +1,1 @@
-clean install -Drevision=12
+clean install -Drevision=12 -X

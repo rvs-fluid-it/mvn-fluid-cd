@@ -2,6 +2,7 @@ package be.fluid.mvn.cd.x.freeze.replace;
 
 import be.fluid.mvn.cd.x.freeze.model.GroupIdArtifactIdVersionPrefix;
 import be.fluid.mvn.cd.x.freeze.resolve.FrozenArtifactResolver;
+import org.codehaus.plexus.logging.Logger;
 import org.xml.sax.Attributes;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
@@ -17,6 +18,8 @@ import static be.fluid.mvn.cd.x.freeze.model.KnownElementNames.*;
 import static be.fluid.mvn.cd.x.freeze.model.MavenConventions.SNAPSHOT_POSTFIX;
 
 public class FreezeHandler extends DefaultHandler {
+
+    private final Logger logger;
     private Locator documentLocator;
     private int indentLevel = 0;
     private final Writer out;
@@ -28,9 +31,10 @@ public class FreezeHandler extends DefaultHandler {
 
     private GroupIdArtifactIdVersionPrefix currentGroupIdArtifactIdVersionPrefix = new GroupIdArtifactIdVersionPrefix();
 
-    public FreezeHandler(OutputStream outputStream, FrozenArtifactResolver frozenArtifactResolver) {
+    public FreezeHandler(OutputStream outputStream, FrozenArtifactResolver frozenArtifactResolver, Logger logger) {
         this.out = new OutputStreamWriter(outputStream);
         this.frozenArtifactResolver = frozenArtifactResolver;
+        this.logger = logger;
     }
 
     /**
@@ -65,6 +69,7 @@ public class FreezeHandler extends DefaultHandler {
      */
     public void startDocument()
             throws SAXException {
+        logger.debug("[Freezehandler]: Start parsing of pom file");
     }
 
     /**
@@ -78,6 +83,7 @@ public class FreezeHandler extends DefaultHandler {
             throws SAXException {
         try {
             out.flush();
+            logger.debug("[Freezehandler]: End parsing of pom file");
         } catch (IOException e) {
             throw new SAXException("I/O error", e);
         }
@@ -176,6 +182,8 @@ public class FreezeHandler extends DefaultHandler {
                                 String versionPrefix = s.split(SNAPSHOT_POSTFIX)[0];
                                 this.currentGroupIdArtifactIdVersionPrefix = this.currentGroupIdArtifactIdVersionPrefix.addVersionPrefix(versionPrefix);
                                 s = this.frozenArtifactResolver.getLatestFrozenVersion(this.currentGroupIdArtifactIdVersionPrefix).version();
+                                logger.info("[Freezehandler]: Replace version of " + this.currentGroupIdArtifactIdVersionPrefix +
+                                        " with" + s);
                             }
                         }
                     default:

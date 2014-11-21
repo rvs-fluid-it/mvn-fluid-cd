@@ -1,6 +1,8 @@
 package be.fluid.mvn.cd.x.freeze;
 
+import be.fluid.mvn.cd.x.freeze.mapping.ArtifactFreezeMapping;
 import org.apache.maven.AbstractMavenLifecycleParticipant;
+import org.apache.maven.MavenExecutionException;
 import org.apache.maven.execution.MavenSession;
 import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.component.annotations.Requirement;
@@ -27,17 +29,23 @@ public class FreezeExtension extends AbstractMavenLifecycleParticipant {
     @Requirement
     private Logger logger;
 
+    @Requirement
+    private ArtifactFreezeMapping artifactFreezeMapping;
+
     @Override
-    public void afterProjectsRead( MavenSession session ) {
+    public void afterSessionStart(MavenSession session)
+            throws MavenExecutionException {
         if (freezingEnabled()) {
-            logger.info("Freezing poms ...");
+            logger.info("[FreezeExtension]: Freezing poms ...");
+            artifactFreezeMapping.put(getRevision(), session.getRequest().getPom());
         }
     }
 
     @Override
-    public void afterSessionEnd( MavenSession session ) {
+    public void afterSessionEnd( MavenSession session )
+            throws MavenExecutionException {
         if (freezingEnabled()) {
-            logger.info("Poms are frozen ...");
+            logger.info("[FreezeExtension]: Poms are frozen ...");
         }
     }
 

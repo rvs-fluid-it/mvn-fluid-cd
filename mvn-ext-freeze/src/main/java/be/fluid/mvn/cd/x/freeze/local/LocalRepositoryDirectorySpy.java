@@ -21,6 +21,9 @@ public class LocalRepositoryDirectorySpy implements EventSpy {
     public void onEvent(Object event) throws Exception {
         if (event instanceof SettingsBuildingResult) {
             String localRepositoryPath = ((SettingsBuildingResult) event).getEffectiveSettings().getLocalRepository();
+            if (localRepositoryPath == null) {
+                localRepositoryPath = "~/.m2/repository";
+            }
             File localRepositoryFile = new File(localRepositoryPath);
             if (localRepositoryFile.exists() && localRepositoryFile.isDirectory()) {
                 this.localRepositoryDirectory = localRepositoryFile;
