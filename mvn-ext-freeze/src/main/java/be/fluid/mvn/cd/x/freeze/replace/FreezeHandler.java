@@ -182,8 +182,9 @@ public class FreezeHandler extends DefaultHandler {
                                 String versionPrefix = s.split(SNAPSHOT_POSTFIX)[0];
                                 this.currentGroupIdArtifactIdVersionPrefix = this.currentGroupIdArtifactIdVersionPrefix.addVersionPrefix(versionPrefix);
                                 s = this.frozenArtifactResolver.getLatestFrozenVersion(this.currentGroupIdArtifactIdVersionPrefix).version();
-                                logger.info("[Freezehandler]: Replace version of " + this.currentGroupIdArtifactIdVersionPrefix +
-                                        " with" + s);
+                                logger.info("[Freezehandler]: " + this.currentGroupIdArtifactIdVersionPrefix + SNAPSHOT_POSTFIX +
+                                        " in pom is frozen as version " + s);
+                                // TODO Add to freeze mapping
                             }
                         }
                     default:

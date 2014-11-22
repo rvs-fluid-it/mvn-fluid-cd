@@ -1,0 +1,3 @@
+Shitty plugin is bypassing the PomLocator.
+(The plugin predates Maven 3 and is not actively maintained)
+Until fixed run the integration tests (ci_x_...) manually from the respective base directories.

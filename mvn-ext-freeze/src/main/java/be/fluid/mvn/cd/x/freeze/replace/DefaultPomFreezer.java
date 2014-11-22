@@ -54,6 +54,9 @@ public class DefaultPomFreezer implements PomFreezer {
         try {
             File frozenPomFile = new File(pomFile.getParentFile(), FROZEN_POM_FILE);
             freeze(new FileInputStream(pomFile), new FileOutputStream(frozenPomFile));
+            logger.info("[PomFreezer]: " +
+                    pomFile.getName() +
+                    " is frozen as " + FROZEN_POM_FILE);
             logger.debug("[PomFreezer]: Frozen pom location: [" + pomFile.getAbsolutePath() + "]");
             return frozenPomFile;
         } catch (FileNotFoundException e) {

@@ -29,24 +29,15 @@ public class FreezeExtension extends AbstractMavenLifecycleParticipant {
     @Requirement
     private Logger logger;
 
-    @Requirement
-    private ArtifactFreezeMapping artifactFreezeMapping;
-
     @Override
     public void afterSessionStart(MavenSession session)
             throws MavenExecutionException {
-        if (freezingEnabled()) {
-            logger.info("[FreezeExtension]: Freezing poms ...");
-            artifactFreezeMapping.put(getRevision(), session.getRequest().getPom());
-        }
+        // The poms are already frozen before the lifecycle participant gets notified
     }
 
     @Override
     public void afterSessionEnd( MavenSession session )
             throws MavenExecutionException {
-        if (freezingEnabled()) {
-            logger.info("[FreezeExtension]: Poms are frozen ...");
-        }
     }
 
 }

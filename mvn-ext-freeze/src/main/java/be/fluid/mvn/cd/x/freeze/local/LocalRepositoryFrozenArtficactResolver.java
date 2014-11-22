@@ -1,5 +1,6 @@
 package be.fluid.mvn.cd.x.freeze.local;
 
+import be.fluid.mvn.cd.x.freeze.FreezeException;
 import be.fluid.mvn.cd.x.freeze.mapping.ArtifactFreezeMapping;
 import be.fluid.mvn.cd.x.freeze.model.GroupIdArtifactIdVersion;
 import be.fluid.mvn.cd.x.freeze.model.GroupIdArtifactIdVersionPrefix;
@@ -37,30 +38,35 @@ public class LocalRepositoryFrozenArtficactResolver implements FrozenArtifactRes
 
     @Override
     public GroupIdArtifactIdVersion getLatestFrozenVersion(final GroupIdArtifactIdVersionPrefix groupIdArtifactIdVersionPrefix) {
-        logger.info("Freezing pom [" + groupIdArtifactIdVersionPrefix.artifactId() + "] ...");
+        logger.debug("[LocalRepositoryFrozenArtifactResolver]: Looking up frozen version of " + groupIdArtifactIdVersionPrefix + " ...");
         if (artifactFreezeMapping.contains(groupIdArtifactIdVersionPrefix)) {
             return artifactFreezeMapping.getFrozenArtifact(groupIdArtifactIdVersionPrefix);
         } else {
-            if (localRepositoryDirectorySpy != null && localRepositoryDirectorySpy.localRepositoryDirectory() != null) {
-                StringBuffer artifactPathBuffer = new StringBuffer(localRepositoryDirectorySpy.localRepositoryDirectory().getAbsolutePath());
-                artifactPathBuffer.append("/").append(groupIdArtifactIdVersionPrefix.groupId().replace(".", "/"));
-                artifactPathBuffer.append("/").append(groupIdArtifactIdVersionPrefix.artifactId()).append("/");
-                File artifactPath = new File(artifactPathBuffer.toString());
-                logger.debug("ArtifactPath : " + artifactPath.getAbsolutePath());
-                logger.debug("VersionPrefix : " + groupIdArtifactIdVersionPrefix.versionPrefix());
-                if (artifactPath.exists() && artifactPath.isDirectory()) {
-                    String[] versionCandidates = artifactPath.list(new FilenameFilter() {
-                        @Override
-                        public boolean accept(File dir, String name) {
-                            return name.startsWith(groupIdArtifactIdVersionPrefix.versionPrefix());
-                        }
-                    });
-                    logger.debug("nr of candidates : " + versionCandidates.length);
-                    return new GroupIdArtifactIdVersion(groupIdArtifactIdVersionPrefix.groupId(), groupIdArtifactIdVersionPrefix.artifactId(), latestFrozenVersion(versionCandidates));
+            if (localRepositoryDirectorySpy != null) {
+                if (localRepositoryDirectorySpy.localRepositoryDirectory() != null) {
+                    StringBuffer artifactPathBuffer = new StringBuffer(localRepositoryDirectorySpy.localRepositoryDirectory().getAbsolutePath());
+                    artifactPathBuffer.append("/").append(groupIdArtifactIdVersionPrefix.groupId().replace(".", "/"));
+                    artifactPathBuffer.append("/").append(groupIdArtifactIdVersionPrefix.artifactId()).append("/");
+                    File artifactPath = new File(artifactPathBuffer.toString());
+                    logger.debug("[LocalRepositoryFrozenArtifactResolver]: Looking for frozen version in folder " + artifactPath.getAbsolutePath());
+                    if (artifactPath.exists() && artifactPath.isDirectory()) {
+                        String[] versionCandidates = artifactPath.list(new FilenameFilter() {
+                            @Override
+                            public boolean accept(File dir, String name) {
+                                return name.startsWith(groupIdArtifactIdVersionPrefix.versionPrefix());
+                            }
+                        });
+                        logger.debug("nr of candidates : " + versionCandidates.length);
+                        return new GroupIdArtifactIdVersion(groupIdArtifactIdVersionPrefix.groupId(), groupIdArtifactIdVersionPrefix.artifactId(), latestFrozenVersion(versionCandidates));
+                    }
+                    throw new FreezeException("[LocalRepositoryFrozenArtifactResolver]: Frozen version not found for " +
+                            groupIdArtifactIdVersionPrefix +
+                            " ...");
                 }
+                throw new FreezeException("[LocalRepositoryFrozenArtifactResolver]: Unknown local repository folder");
             }
+            throw new FreezeException("[LocalRepositoryFrozenArtifactResolver]: Missing " + LocalRepositoryDirectorySpy.class.getSimpleName());
         }
-        throw new IllegalStateException("Version not found ...");
     }
 
     String latestFrozenVersion(String[] versionCandidates) {
