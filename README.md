@@ -37,7 +37,21 @@ Maven extension(s) to facilitate continuously delivering microservices
   * ...
 * Solution
   * Bunch of Maven extensions
-  * Stay tuned ...
+  * Algorithm
+    * Activate freezing when a revision is provided (-Drevision=xyz)
+    * Start parsing pom.xml file and stream it to frozen.pom.xml 
+    * Extract the properties (groupId, artifactId, version) of the pom's project artifact
+    * Replace the snapshot ending of the pom's project artifact version with the given revision number (1.2-SNAPSHOT -> 1.2-xyz)
+    * For each snapshot dependency version encountered while parsing the pom
+      * Lookup the latest frozen version of the artifact in Maven's local repository
+      * Replace the version of the dependency whith the latest frozen version
+    * Let the Maven build use the frozen poms instead of the regular poms for all subsequent steps (especially install and deploy)
+  * See it in action
+    * Clone the _mvn-fluid-it_ github project
+    * Run _'mvn clean install'_
+    * Have a look at the integration tests in _'mvn-ext-freeze/src/it'_
   * Links
     * [Creating a Custom Build Extension for Maven 3.0 - Bret Porter](https://brettporter.wordpress.com/2010/10/05/creating-a-custom-build-extension-for-maven-3-0/)
     * [Plexus Container Five Minute Tutorial](http://blog.sonatype.com/2009/05/plexus-container-five-minute-tutorial)
+    * [Maven's event spy mechanism](http://maven.apache.org/ref/3.2.3/apidocs/org/apache/maven/eventspy/EventSpy.html)
+    * [__S__ uper __H__ elpful __I__ ntegration __T__ est __T__ hingy  , better known as the Shitty plugin](http://mojo.codehaus.org/shitty-maven-plugin/index.html)
