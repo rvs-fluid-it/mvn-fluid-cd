@@ -48,8 +48,11 @@ Maven extension(s) to facilitate continuously delivering microservices
     * Let the Maven build use the frozen poms instead of the regular poms for all subsequent steps (especially install and deploy)
   * See it in action
     * Clone the _mvn-fluid-it_ github project
-    * Run _'mvn clean install'_
+    * 'cd mvn-ext-s-modules'
+    * Run _'mvn clean install'_ (First run will build the Maven extensions and will copy these to the $M2_HOME/lib/ext folder)
+    * Run _'mvn clean install'_ again (The magic (= the freezing of the snapshots :-)) will now happen because the extensions were installed in the previous step.) 
     * Have a look at the integration tests in _'mvn-ext-freeze/src/it'_
+    * (To uninstall the extensions just remove the four jars from the $M2_HOME/lib/ext)
   * Links
     * [Creating a Custom Build Extension for Maven 3.0 - Bret Porter](https://brettporter.wordpress.com/2010/10/05/creating-a-custom-build-extension-for-maven-3-0/)
     * [Plexus Container Five Minute Tutorial](http://blog.sonatype.com/2009/05/plexus-container-five-minute-tutorial)
