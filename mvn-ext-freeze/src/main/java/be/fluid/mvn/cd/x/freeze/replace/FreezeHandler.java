@@ -15,7 +15,7 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 
 import static be.fluid.mvn.cd.x.freeze.model.KnownElementNames.*;
-import static be.fluid.mvn.cd.x.freeze.model.MavenConventions.SNAPSHOT_POSTFIX;
+import static be.fluid.mvn.cd.x.freeze.model.MavenConventions.*;
 
 public class FreezeHandler extends DefaultHandler {
 
@@ -146,6 +146,7 @@ public class FreezeHandler extends DefaultHandler {
             case GROUP_ID:
             case ARTIFACT_ID:
             case PACKAGING:
+            case RELATIVE_PATH:
             case "":
                 break;
             case VERSION:
@@ -184,9 +185,11 @@ public class FreezeHandler extends DefaultHandler {
                                 s = this.frozenArtifactResolver.getLatestFrozenVersion(this.currentGroupIdArtifactIdVersionPrefix).version();
                                 logger.info("[Freezehandler]: " + this.currentGroupIdArtifactIdVersionPrefix + SNAPSHOT_POSTFIX +
                                         " in pom is frozen as version " + s);
-                                // TODO Add to freeze mapping
+                                // TODO Add to freeze mapping for caching purposes
                             }
                         }
+                    case RELATIVE_PATH:
+                        s = s.replace(POM_FILE, FROZEN_POM_FILE);
                     default:
                         break;
                 }
