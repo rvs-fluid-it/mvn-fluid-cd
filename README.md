@@ -1,7 +1,7 @@
 mvn-fluid-cd
 ============
 
-Maven extension(s) to facilitate continuously delivering microservices
+[Maven](maven.apache.org) extension(s) to facilitate [continuous delivery](http://martinfowler.com/books/continuousDelivery.html) of [microservices](http://martinfowler.com/articles/microservices.html)
 
 ## Problem statement
 
