@@ -3,11 +3,9 @@ mvn-fluid-cd
 
 [Maven](http://maven.apache.org) extension(s) to facilitate [continuous delivery](http://martinfowler.com/books/continuousDelivery.html) of [microservices](http://martinfowler.com/articles/microservices.html)
 
-## Problem statement
+## Problem statement (Anno 2014)
 
 > Continuously delivering [microservices](http://martinfowler.com/articles/microservices.html) built by Maven is tough and painful. 
-
-(Anno 2014)
 
 * [Technology radar Oktober 2012 - Thoughtworks](http://www.thoughtworks.com/radar/tools/maven)
 
