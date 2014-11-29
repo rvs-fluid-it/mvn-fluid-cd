@@ -4,7 +4,6 @@ Surfing the continuous delivery pipe ~
 
 mvn-fluid-cd
 ============
-
 [Maven](http://maven.apache.org) extension(s) to facilitate [continuous delivery](http://martinfowler.com/books/continuousDelivery.html) of [microservices](http://martinfowler.com/articles/microservices.html)
 
 ## Problem statement (Anno 2014)
@@ -75,3 +74,4 @@ mvn-fluid-cd
     * [Plexus Container Five Minute Tutorial](http://blog.sonatype.com/2009/05/plexus-container-five-minute-tutorial)
     * [Maven's event spy mechanism](http://maven.apache.org/ref/3.2.3/apidocs/org/apache/maven/eventspy/EventSpy.html)
     * [__S__ uper __H__ elpful __I__ ntegration __T__ est __T__ hingy  , better known as the Shitty plugin](http://mojo.codehaus.org/shitty-maven-plugin/index.html)
+    * [40 Amazing Examples of Wave and Surf Photography - Creative Commons](http://creativecan.com/2012/06/wave-and-surf-photography/)
