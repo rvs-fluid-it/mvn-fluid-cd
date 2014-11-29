@@ -64,6 +64,7 @@ mvn-fluid-cd
       * Replace the version of the dependency whith the latest frozen version
     * Let the Maven build use the frozen poms instead of the regular poms for all subsequent steps (especially install and deploy)
   * See it in action
+  
     ![Sample](/mvn-ext-freeze/src/doc/sample-service-dependencies-graph.png?raw=true)
     * Clone the _mvn-fluid-it_ github project
     * 'cd mvn-ext-s-modules'
