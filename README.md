@@ -31,8 +31,9 @@ mvn-fluid-cd
     * _I'll do it for you but Keep It Simple Stupid ..._
   * ...
 * Scope
-  * Java/JVM
+  * Java/JVM 1.7
   * Maven as build tool
+    * Tested with 3.2.3 
   * git, svn as versioning tool
   * ...
 * Solution
