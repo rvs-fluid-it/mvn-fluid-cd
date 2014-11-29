@@ -69,6 +69,16 @@ public class LocalRepositoryFrozenArtficactResolver implements FrozenArtifactRes
         }
     }
 
+    @Override
+    public boolean artifactInheritsVersionFromParent() {
+        return artifactFreezeMapping.artifactInheritsVersionOfParent();
+    }
+
+    @Override
+    public String artifactFrozenVersion() {
+        return artifactFreezeMapping.artifactFrozenVersion();
+    }
+
     String latestFrozenVersion(String[] versionCandidates) {
         String latestFrozenVersion = null;
         StringBuffer versionsText = new StringBuffer("[");

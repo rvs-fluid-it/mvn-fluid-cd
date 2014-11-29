@@ -6,7 +6,7 @@ import be.fluid.mvn.cd.x.freeze.model.GroupIdArtifactIdVersionPrefix;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
-public class SamplePom {
+public class SamplePom_Library {
     public static final String GROUP_ID = "be.fluid.tools.mvn.cd";
     public static final String ARTIFACT_ID = "sample-artifact-id";
     public static final String PARENT_ARTIFACT_ID = "parent-sample-artifact-id";
@@ -32,7 +32,10 @@ public class SamplePom {
                 "    <version>" + VERSION + "</version>\n" +
                 "    <relativePath>../" + PARENT_ARTIFACT_ID + "/pom.xml</relativePath>\n" +
                 "  </parent>\n" +
+                "  <name>Name of the artifact</name>\n" +
+                "  <groupId>" + GROUP_ID + "</groupId>\n" +
                 "  <artifactId>" + ARTIFACT_ID + "</artifactId>\n" +
+                "  <version>" + VERSION + "</version>" +
                 "  <dependencies>\n" +
                 "    <dependency>\n" +
                 "      <groupId>" + LIBRARY_GROUP_ID + "</groupId>\n" +

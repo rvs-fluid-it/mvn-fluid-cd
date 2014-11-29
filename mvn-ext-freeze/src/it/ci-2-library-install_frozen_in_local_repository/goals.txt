@@ -1,1 +1,1 @@
-clean install -Drevision=23
+clean install -Drevision=23 -X

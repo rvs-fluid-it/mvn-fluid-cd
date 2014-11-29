@@ -7,7 +7,6 @@ public class GroupIdArtifactIdVersionPrefix {
     private final String artifactId;
     private final String versionPrefix;
 
-
     public GroupIdArtifactIdVersionPrefix(String groupId, String artifactId, String versionPrefix) {
         this.groupId = groupId;
         this.artifactId = artifactId;

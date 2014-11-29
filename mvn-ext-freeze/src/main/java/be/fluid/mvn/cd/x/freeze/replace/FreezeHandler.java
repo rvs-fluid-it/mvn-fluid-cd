@@ -17,6 +17,8 @@ import java.io.Writer;
 import static be.fluid.mvn.cd.x.freeze.model.KnownElementNames.*;
 import static be.fluid.mvn.cd.x.freeze.model.MavenConventions.*;
 
+// TODO replace snapshot versions of plugins as well
+
 public class FreezeHandler extends DefaultHandler {
 
     private final Logger logger;
@@ -28,6 +30,7 @@ public class FreezeHandler extends DefaultHandler {
 
     private boolean currentlyInLeafElement = false;
     private String currentElement = null;
+    private int currentDepth = 0;
 
     private GroupIdArtifactIdVersionPrefix currentGroupIdArtifactIdVersionPrefix = new GroupIdArtifactIdVersionPrefix();
 
@@ -109,6 +112,7 @@ public class FreezeHandler extends DefaultHandler {
                              Attributes attributes)
             throws SAXException {
         currentlyInLeafElement = false;
+        currentDepth ++;
         currentElement = qualifiedName;
         // Emit element name
         write(nl + indent(+1) + "<" +
@@ -137,11 +141,17 @@ public class FreezeHandler extends DefaultHandler {
                            String qualifiedName)
             throws SAXException {
         currentElement = null;
+        currentDepth--;
         String indentation = indent(-1);
         String closingElement = "</" + getName(localName, qualifiedName) + ">";
         write(currentlyInLeafElement ? closingElement : nl + indentation + closingElement);
         currentlyInLeafElement = false;
         this.currentElement = null;
+        if (frozenArtifactResolver.artifactInheritsVersionFromParent() &&
+            ARTIFACT_ID.equals(qualifiedName) &&
+            currentDepth == 1) {
+            write(nl + indentation + "<" + VERSION + ">" + frozenArtifactResolver.artifactFrozenVersion() + "</" + VERSION + ">");
+        }
         switch (qualifiedName) {
             case GROUP_ID:
             case ARTIFACT_ID:

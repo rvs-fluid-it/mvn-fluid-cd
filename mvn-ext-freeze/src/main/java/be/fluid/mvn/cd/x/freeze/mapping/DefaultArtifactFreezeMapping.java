@@ -1,5 +1,6 @@
 package be.fluid.mvn.cd.x.freeze.mapping;
 
+import be.fluid.mvn.cd.x.freeze.FreezeExtension;
 import be.fluid.mvn.cd.x.freeze.model.GroupIdArtifactIdVersion;
 import be.fluid.mvn.cd.x.freeze.model.GroupIdArtifactIdVersionPrefix;
 import org.codehaus.plexus.component.annotations.Component;
@@ -22,6 +23,8 @@ import static be.fluid.mvn.cd.x.freeze.model.KnownElementNames.*;
 @Component(role = ArtifactFreezeMapping.class)
 public class DefaultArtifactFreezeMapping implements ArtifactFreezeMapping {
     private final Map<GroupIdArtifactIdVersionPrefix, GroupIdArtifactIdVersion> mapping = new HashMap<GroupIdArtifactIdVersionPrefix, GroupIdArtifactIdVersion>();
+    private boolean artifactInheritsVersionFromParent = false;
+    private String artifactFrozenVersion;
 
     @Requirement
     private Logger logger;
@@ -79,7 +82,7 @@ public class DefaultArtifactFreezeMapping implements ArtifactFreezeMapping {
             ElementTree tree = new ElementTree(PROJECT);
             tree.root().addChild(MODEL_VERSION);
             tree.root().addChild(PARENT).addChild(new String[] {GROUP_ID, ARTIFACT_ID, VERSION, RELATIVE_PATH});
-            tree.root().addChild(GROUP_ID, ARTIFACT_ID, VERSION, PACKAGING);
+            tree.root().addChild(GROUP_ID, ARTIFACT_ID, VERSION, PACKAGING, NAME, DESCRIPTION);
 
             boolean elementFound = true;
             while (elementFound && reader.hasNext()) {
@@ -102,9 +105,22 @@ public class DefaultArtifactFreezeMapping implements ArtifactFreezeMapping {
                         break;
                 }
             }
-            return tree.groupIdArtifactIdVersion().stripSnapshotPostfix();
+            artifactInheritsVersionFromParent = !tree.artifactOverridesVersionFromParent();
+            GroupIdArtifactIdVersionPrefix groupIdArtifactIdVersionPrefix = tree.groupIdArtifactIdVersion().stripSnapshotPostfix();
+            artifactFrozenVersion = groupIdArtifactIdVersionPrefix.versionPrefix() + "-" + FreezeExtension.getRevision();
+            return groupIdArtifactIdVersionPrefix;
         } catch (XMLStreamException e) {
             throw new RuntimeException(e);
         }
     }
+
+    public boolean artifactInheritsVersionOfParent() {
+        return artifactInheritsVersionFromParent;
+    }
+
+    @Override
+    public String artifactFrozenVersion() {
+        return artifactFrozenVersion;
+    }
+
 }

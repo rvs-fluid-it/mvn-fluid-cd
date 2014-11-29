@@ -9,4 +9,6 @@ public class KnownElementNames {
     public static final String VERSION = "version";
     public static final String PACKAGING = "packaging";
     public static final String RELATIVE_PATH = "relativePath";
+    public static final String NAME = "name";
+    public static final String DESCRIPTION = "description";
 }

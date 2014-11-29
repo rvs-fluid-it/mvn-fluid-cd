@@ -5,10 +5,15 @@ import be.fluid.mvn.cd.x.freeze.model.GroupIdArtifactIdVersion;
 import java.util.LinkedList;
 import java.util.List;
 
+import static be.fluid.mvn.cd.x.freeze.model.KnownElementNames.*;
+
 public class ElementTree {
     private Element root;
     private Element current;
+    private int currentDepth = 0;
     private GroupIdArtifactIdVersion groupIdArtifactIdVersion = new GroupIdArtifactIdVersion();
+    private boolean artifactOverridesVersionFromParent = false;
+    private boolean inParentElement = false;
 
     public ElementTree(String rootName) {
         root = new Element(rootName);
@@ -24,6 +29,9 @@ public class ElementTree {
 
     public boolean moveToChild(String name) {
         if (name != null) {
+            if (name.equals(PARENT)) {
+                inParentElement = true;
+            }
             if (current != null) {
                 for (Element child : current.children) {
                     if (name.equals(child.name)) {
@@ -42,6 +50,9 @@ public class ElementTree {
     }
 
     public void moveToParent() {
+        if (PARENT.equals(this.current.name)) {
+            inParentElement = false;
+        }
         this.current = this.current.parent;
     }
 
@@ -54,6 +65,9 @@ public class ElementTree {
                 groupIdArtifactIdVersion = groupIdArtifactIdVersion.addArtifactId(value);
                 break;
             case "version":
+                if (!inParentElement) {
+                    artifactOverridesVersionFromParent = true;
+                }
                 groupIdArtifactIdVersion = groupIdArtifactIdVersion.addVersion(value);
                 break;
             default:
@@ -63,6 +77,10 @@ public class ElementTree {
 
     public GroupIdArtifactIdVersion groupIdArtifactIdVersion() {
         return groupIdArtifactIdVersion;
+    }
+
+    public boolean artifactOverridesVersionFromParent() {
+        return  artifactOverridesVersionFromParent;
     }
 
     public static class Element {

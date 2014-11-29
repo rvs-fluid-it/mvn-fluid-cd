@@ -10,4 +10,6 @@ public interface ArtifactFreezeMapping {
     GroupIdArtifactIdVersion getFrozenArtifact(GroupIdArtifactIdVersionPrefix groupIdArtifactIdVersionPrefix);
     void put(GroupIdArtifactIdVersionPrefix groupIdArtifactIdVersionPrefix, GroupIdArtifactIdVersion groupIdArtifactIdVersion);
     void put(String revision, File pom);
+    boolean artifactInheritsVersionOfParent();
+    String artifactFrozenVersion();
 }

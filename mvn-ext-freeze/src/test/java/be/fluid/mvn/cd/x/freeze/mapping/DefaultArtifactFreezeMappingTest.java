@@ -1,16 +1,9 @@
 package be.fluid.mvn.cd.x.freeze.mapping;
 
-import be.fluid.mvn.cd.x.freeze.model.GroupIdArtifactIdVersion;
-import be.fluid.mvn.cd.x.freeze.model.GroupIdArtifactIdVersionPrefix;
-import be.fluid.mvn.cd.x.freeze.pom.SamplePom;
+import be.fluid.mvn.cd.x.freeze.pom.SamplePom_ArtifactInheritsVersion;
 import org.codehaus.plexus.logging.console.ConsoleLogger;
 import org.junit.Assert;
 import org.junit.Test;
-
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.InputStream;
-import java.io.StringBufferInputStream;
 
 public class DefaultArtifactFreezeMappingTest {
 
@@ -24,8 +17,8 @@ public class DefaultArtifactFreezeMappingTest {
     public void testReadingPom() {
         DefaultArtifactFreezeMapping mapping = new DefaultArtifactFreezeMapping(new ConsoleLogger());
 
-        mapping.put(REVISION, SamplePom.asStream());
-        Assert.assertTrue(mapping.contains(SamplePom.groupIdArtifactIdVersionPrefix()));
-        Assert.assertEquals(SamplePom.frozenGroupIdArtifactIdVersion(), mapping.getFrozenArtifact(SamplePom.groupIdArtifactIdVersionPrefix()));
+        mapping.put(REVISION, SamplePom_ArtifactInheritsVersion.asStream());
+        Assert.assertTrue(mapping.contains(SamplePom_ArtifactInheritsVersion.groupIdArtifactIdVersionPrefix()));
+        Assert.assertEquals(SamplePom_ArtifactInheritsVersion.frozenGroupIdArtifactIdVersion(), mapping.getFrozenArtifact(SamplePom_ArtifactInheritsVersion.groupIdArtifactIdVersionPrefix()));
     }
 }
