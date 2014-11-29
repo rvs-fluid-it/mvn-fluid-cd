@@ -40,6 +40,7 @@ mvn-fluid-cd
   * [Trunk based development using feature toggles](http://paulhammant.com/2013/04/05/what-is-trunk-based-development/)
   * ...
 * Solution
+
   ![Solution](/mvn-ext-freeze/src/doc/Continuous delivery with Maven.png?raw=true)
   * Bundle of Maven extensions
     * General design rules for Maven extensions
