@@ -33,6 +33,7 @@ mvn-fluid-cd
   * Maven as build tool
     * Tested with 3.2.3 
   * git, svn as versioning tool
+  * [Trunk based development using feature toggles](http://paulhammant.com/2013/04/05/what-is-trunk-based-development/)
   * ...
 * Solution
   * Bundle of Maven extensions
