@@ -1,3 +1,7 @@
+Surfing the continuous delivery pipe ~
+======================================
+![Having fun continuously delivering microservices built by Maven](http://creativecan.com/wp-content/uploads/2012/06/wave-tube_thumb.jpg)
+
 mvn-fluid-cd
 ============
 
