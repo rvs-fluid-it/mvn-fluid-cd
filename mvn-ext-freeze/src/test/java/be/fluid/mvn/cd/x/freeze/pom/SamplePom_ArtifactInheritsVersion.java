@@ -7,14 +7,14 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
 public class SamplePom_ArtifactInheritsVersion {
-    public static final String GROUP_ID = "be.fluid.tools.mvn.cd";
+    public static final String GROUP_ID = "be.fluid-it.tools.mvn.cd";
     public static final String ARTIFACT_ID = "sample-artifact-id";
     public static final String PARENT_ARTIFACT_ID = "parent-sample-artifact-id";
     public static final String VERSION_PREFIX = "0.1";
     public static final String VERSION = VERSION_PREFIX + "-SNAPSHOT";
     public static final String REVISION = "123";
     public static final String FROZEN_VERSION = VERSION_PREFIX + "-" + REVISION;
-    public static final String LIBRARY_GROUP_ID = "be.fluid.tools.mvn.cd.library";
+    public static final String LIBRARY_GROUP_ID = "be.fluid-it.tools.mvn.cd.library";
     public static final String LIBRARY_ARTIFACT_ID = "sample-library-artifact-id";
     public static final String LIBRARY_VERSION_PREFIX = "1.2";
     public static final String LIBRARY_VERSION = LIBRARY_VERSION_PREFIX + "-SNAPSHOT";

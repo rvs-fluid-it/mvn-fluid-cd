@@ -6,12 +6,12 @@
 	<modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>be.fluid.mvn.cd.it</groupId>
+    <groupId>be.fluid-it.mvn.cd.it</groupId>
     <artifactId>sample-parent</artifactId>
     <version>1.2-SNAPSHOT</version>
   </parent>
 
-  <groupId>be.fluid.mvn.cd.it</groupId>
+  <groupId>be.fluid-it.mvn.cd.it</groupId>
   <artifactId>sample-service-parent</artifactId>
   <version>3.4-SNAPSHOT</version>
   <packaging>pom</packaging>
@@ -27,7 +27,7 @@
     
       <!-- Libraries -->
       <dependency>
-        <groupId>be.fluid.mvn.cd.it</groupId>
+        <groupId>be.fluid-it.mvn.cd.it</groupId>
         <artifactId>sample-library</artifactId>
         <version>2.3-SNAPSHOT</version>
       </dependency>

@@ -6,7 +6,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>be.fluid.mvn.cd.it</groupId>
+    <groupId>be.fluid-it.mvn.cd.it</groupId>
     <artifactId>sample-service-parent</artifactId>
     <version>3.4-SNAPSHOT</version>
     <relativePath>../sample-service-parent/pom.xml</relativePath>

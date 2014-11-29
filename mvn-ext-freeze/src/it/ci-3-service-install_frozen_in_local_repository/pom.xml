@@ -5,7 +5,7 @@
 		http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>be.fluid.mvn.cd.it</groupId>
+  <groupId>be.fluid-it.mvn.cd.it</groupId>
   <artifactId>dummy-pointing-to-sample-library</artifactId>
   <version>testing</version>
   <packaging>pom</packaging>

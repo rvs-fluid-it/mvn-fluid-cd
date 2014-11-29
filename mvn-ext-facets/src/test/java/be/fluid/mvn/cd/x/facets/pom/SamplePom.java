@@ -13,7 +13,7 @@ public class SamplePom {
                 "\t\thttp://maven.apache.org/maven-v4_0_0.xsd\">\n" +
                 "  <modelVersion>4.0.0</modelVersion>\n" +
                 "\n" +
-                "  <groupId>be.fluid.mvn.cd.it</groupId>\n" +
+                "  <groupId>be.fluid-it.mvn.cd.it</groupId>\n" +
                 "  <artifactId>sample-pom-having-facet</artifactId>\n" +
                 "  <version>1.0-SNAPSHOT</version>\n" +
                 "  <packaging>jar</packaging>\n" +

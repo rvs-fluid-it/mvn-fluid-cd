@@ -5,12 +5,12 @@
 		http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
   <parent>
-      <groupId>be.fluid.mvn.cd.it</groupId>
+      <groupId>be.fluid-it.mvn.cd.it</groupId>
       <artifactId>sample-parent</artifactId>
       <version>1.2-SNAPSHOT</version>
   </parent>
 
-  <groupId>be.fluid.mvn.cd.it</groupId>
+  <groupId>be.fluid-it.mvn.cd.it</groupId>
   <artifactId>sample-service-modules</artifactId>
   <version>3.4-SNAPSHOT</version>
   <packaging>pom</packaging>
