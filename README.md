@@ -40,10 +40,10 @@ mvn-fluid-cd
     * General design rules for Maven extensions
       * Maximal cohesion, minimal coupling
       * Less is more
-        * Minimize transitive jar dependencies of the extension
-        * Minimize inter extension dependencies
-      * Follow or extrapolate Maven conventions/principles 
-      * Piggyback existing Maven features
+        * Minimize the transitive jar dependencies of the extension
+        * Minimize the inter extension dependencies
+      * Follow or extrapolate existing Maven conventions/principles 
+      * Piggyback existing Maven functionality
       * Not viral (Aritfacts uploaded in a Maven repository do not enforce installation of the extension by someone using (=depending) on the artifact)
       * Does not break the Maven support in the IDE
   * Algorithm
