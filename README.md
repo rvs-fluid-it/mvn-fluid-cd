@@ -36,7 +36,16 @@ mvn-fluid-cd
   * git, svn as versioning tool
   * ...
 * Solution
-  * Bunch of Maven extensions
+  * Bundle of Maven extensions
+    * General design rules for Maven extensions
+      * Maximal cohesion, minimal coupling
+      * Less is more
+        * Minimize transitive jar dependencies of the extension
+        * Minimize inter extension dependencies
+      * Follow or extrapolate Maven conventions/principles 
+      * Piggyback existing Maven features
+      * Not viral (Aritfacts uploaded in a Maven repository do not enforce installation of the extension by someone using (=depending) on the artifact)
+      * Does not break the Maven support in the IDE
   * Algorithm
     * Activate freezing when a revision is provided (-Drevision=xyz)
     * Start parsing pom.xml file and stream it to frozen.pom.xml 
