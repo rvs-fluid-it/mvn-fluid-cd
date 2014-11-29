@@ -40,6 +40,7 @@ mvn-fluid-cd
   * [Trunk based development using feature toggles](http://paulhammant.com/2013/04/05/what-is-trunk-based-development/)
   * ...
 * Solution
+  ![Solution](/mvn-ext-freeze/src/doc/Continuous delivery with Maven.png?raw=true)
   * Bundle of Maven extensions
     * General design rules for Maven extensions
       * Maximal cohesion, minimal coupling
@@ -63,6 +64,7 @@ mvn-fluid-cd
       * Replace the version of the dependency whith the latest frozen version
     * Let the Maven build use the frozen poms instead of the regular poms for all subsequent steps (especially install and deploy)
   * See it in action
+    ![Sample](/mvn-ext-freeze/src/doc/sample-service-dependencies-graph.png?raw=true)
     * Clone the _mvn-fluid-it_ github project
     * 'cd mvn-ext-s-modules'
     * Run _'mvn clean install'_ (First run will build the Maven extensions and will copy these to the $M2_HOME/lib/ext folder)
