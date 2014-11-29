@@ -12,5 +12,6 @@
     <module>../mvn-ext-freeze</module>
     <module>../mvn-ext-facets</module>
     <module>../mvn-ext-steps</module>
+    <module>../mvn-ext-scm</module>
   </modules>
 </project>
