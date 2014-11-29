@@ -1,13 +1,11 @@
 mvn-fluid-cd
 ============
 
-Maven extension(s) to facilitate continuously delivering microservices
+[Maven](http://maven.apache.org) extension(s) to facilitate [continuous delivery](http://martinfowler.com/books/continuousDelivery.html) of [microservices](http://martinfowler.com/articles/microservices.html)
 
-## Problem statement
+## Problem statement (Anno 2014)
 
 > Continuously delivering [microservices](http://martinfowler.com/articles/microservices.html) built by Maven is tough and painful. 
-
-(Anno 2014)
 
 * [Technology radar Oktober 2012 - Thoughtworks](http://www.thoughtworks.com/radar/tools/maven)
 
@@ -31,12 +29,25 @@ Maven extension(s) to facilitate continuously delivering microservices
     * _I'll do it for you but Keep It Simple Stupid ..._
   * ...
 * Scope
-  * Java/JVM
+  * Java/JVM 1.7
   * Maven as build tool
+    * Tested with 3.2.3 
   * git, svn as versioning tool
   * ...
 * Solution
-  * Bunch of Maven extensions
+  * Bundle of Maven extensions
+    * General design rules for Maven extensions
+      * Maximal cohesion, minimal coupling
+      * Less is more
+        * Minimize the transitive jar dependencies of the extension
+        * Minimize the inter extension dependencies
+      * Follow or extrapolate existing Maven conventions/principles 
+      * Piggyback existing Maven functionality
+      * Not viral
+        * Local preprocessing of poms
+        * Pom's stored in a Maven repository are processed poms and do not enforce installation of the extension when depending on these
+      * Graceful degradation when extension is not installed
+      * Does not break the Maven support in the IDE
   * Algorithm
     * Activate freezing when a revision is provided (-Drevision=xyz)
     * Start parsing pom.xml file and stream it to frozen.pom.xml 
