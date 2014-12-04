@@ -27,7 +27,6 @@ public class LocalRepositoryFrozenArtficactResolver implements FrozenArtifactRes
 
     public LocalRepositoryFrozenArtficactResolver() {
     }
-
     LocalRepositoryFrozenArtficactResolver(Logger logger,
                                            LocalRepositoryDirectorySpy localRepositoryDirectorySpy,
                                            ArtifactFreezeMapping artifactFreezeMapping) {
@@ -90,8 +89,10 @@ public class LocalRepositoryFrozenArtficactResolver implements FrozenArtifactRes
                 versionsText.append(versionCandidate);
                 if (latestFrozenVersion == null) {
                     latestFrozenVersion = versionCandidate;
-                } else if (!versionCandidate.endsWith(MavenConventions.SNAPSHOT_POSTFIX) && versionCandidate.compareTo(latestFrozenVersion) > 0) {
-                    latestFrozenVersion = versionCandidate;
+                } else if (!versionCandidate.endsWith(MavenConventions.SNAPSHOT_POSTFIX)) {
+                    if (isGreaterThen(versionCandidate, latestFrozenVersion)) {
+                        latestFrozenVersion = versionCandidate;
+                    }
                 }
             }
         }
@@ -99,5 +100,19 @@ public class LocalRepositoryFrozenArtficactResolver implements FrozenArtifactRes
         logger.debug("Version candidates: " + versionsText.toString());
         logger.debug("Latest frozen version: " + latestFrozenVersion);
         return latestFrozenVersion;
+    }
+
+    private boolean isGreaterThen(String versionToMeasure, String referenceVersion) {
+        try {
+            return extractRevision(versionToMeasure) > extractRevision(referenceVersion);
+        } catch (Exception exception) {
+            return versionToMeasure.compareTo(referenceVersion) >0;
+        }
+    }
+
+    private int extractRevision(String latestFrozenVersion) {
+        String[] frozenParts = latestFrozenVersion.split("-");
+        String frozenRevisionPart = frozenParts[frozenParts.length -1];
+        return Integer.parseInt(frozenRevisionPart);
     }
 }

@@ -19,6 +19,7 @@ public class LocalRepositoryDirectorySpy implements EventSpy {
 
     @Override
     public void init(Context context) throws Exception {
+        logger.info("[LocalRepositoryDirectorySpy]: Initialized");
     }
 
     @Requirement
@@ -36,6 +37,7 @@ public class LocalRepositoryDirectorySpy implements EventSpy {
             File localRepositoryFile = new File(localRepositoryPath);
             if (localRepositoryFile.exists() && localRepositoryFile.isDirectory()) {
                 this.localRepositoryDirectory = localRepositoryFile;
+                logger.info("[LocalRepositoryDirectorySpy]: LocalRepositoryDirectory is initialized to " + localRepositoryFile.getAbsolutePath());
             } else {
                 if (FreezeExtension.freezingEnabled()) {
                     throw new FreezeException("[LocalRepositoryDirectorySpy]: Invalid local repository folder " +
