@@ -1,7 +1,7 @@
 package be.fluid_it.mvn.cd.x.freeze.replace;
 
+import be.fluid_it.mvn.cd.x.freeze.mapping.DefaultArtifactFreezeMapping;
 import be.fluid_it.mvn.cd.x.freeze.model.GroupIdArtifactIdVersion;
-import be.fluid_it.mvn.cd.x.freeze.model.GroupIdArtifactIdVersionPrefix;
 import be.fluid_it.mvn.cd.x.freeze.pom.SamplePom_ArtifactInheritsVersion;
 import be.fluid_it.mvn.cd.x.freeze.pom.SamplePom_Library;
 import be.fluid_it.mvn.cd.x.freeze.resolve.FrozenArtifactResolver;
@@ -16,13 +16,13 @@ public class PomFreezerTest {
     public void freezePom_ArtifactInheritsVersion() {
         FrozenArtifactResolver frozenArtifactResolverDummy = new FrozenArtifactResolver() {
             @Override
-            public GroupIdArtifactIdVersion getLatestFrozenVersion(GroupIdArtifactIdVersionPrefix groupIdArtifactIdVersionPrefix) {
-                if (SamplePom_ArtifactInheritsVersion.parentGroupIdArtifactIdVersionPrefix().equals(groupIdArtifactIdVersionPrefix)) {
+            public GroupIdArtifactIdVersion getLatestFrozenVersion(GroupIdArtifactIdVersion snapshotGroupIdArtifactIdVersion) {
+                if (SamplePom_ArtifactInheritsVersion.parentGroupIdArtifactIdVersion().equals(snapshotGroupIdArtifactIdVersion)) {
                     return SamplePom_ArtifactInheritsVersion.frozenParentGroupIdArtifactIdVersion();
-                } else if (SamplePom_ArtifactInheritsVersion.libraryGroupIdArtifactIdVersionPrefix().equals(groupIdArtifactIdVersionPrefix)) {
+                } else if (SamplePom_ArtifactInheritsVersion.libraryGroupIdArtifactIdVersion().equals(snapshotGroupIdArtifactIdVersion)) {
                     return SamplePom_ArtifactInheritsVersion.frozenLibraryGroupIdArtifactIdVersion();
                 }
-                throw new IllegalStateException("Not expected groupIdArtifactIdVersionPrefix : " + groupIdArtifactIdVersionPrefix);
+                throw new IllegalStateException("Not expected groupIdArtifactIdVersionPrefix : " + snapshotGroupIdArtifactIdVersion);
             }
 
             @Override
@@ -37,7 +37,7 @@ public class PomFreezerTest {
         };
 
         ByteArrayOutputStream pomOutputStream = new ByteArrayOutputStream();
-        new DefaultPomFreezer(frozenArtifactResolverDummy, new ConsoleLogger()).freeze(SamplePom_ArtifactInheritsVersion.asStream(), pomOutputStream);
+        new DefaultPomFreezer(frozenArtifactResolverDummy, SamplePom_ArtifactInheritsVersion.fakedStamper(), new ConsoleLogger()).freeze(SamplePom_ArtifactInheritsVersion.asStream(), pomOutputStream);
         String pomContent = pomOutputStream.toString();
         System.out.print(pomContent);
         Assert.assertTrue(pomContent.contains("<version>" + SamplePom_ArtifactInheritsVersion.FROZEN_VERSION + "</version>"));
@@ -48,15 +48,15 @@ public class PomFreezerTest {
     public void freezePom() {
         FrozenArtifactResolver frozenArtifactResolverDummy = new FrozenArtifactResolver() {
             @Override
-            public GroupIdArtifactIdVersion getLatestFrozenVersion(GroupIdArtifactIdVersionPrefix groupIdArtifactIdVersionPrefix) {
-                if (SamplePom_ArtifactInheritsVersion.parentGroupIdArtifactIdVersionPrefix().equals(groupIdArtifactIdVersionPrefix)) {
+            public GroupIdArtifactIdVersion getLatestFrozenVersion(GroupIdArtifactIdVersion snapshotGroupIdArtifactIdVersion) {
+                if (SamplePom_ArtifactInheritsVersion.parentGroupIdArtifactIdVersion().equals(snapshotGroupIdArtifactIdVersion)) {
                     return SamplePom_ArtifactInheritsVersion.frozenParentGroupIdArtifactIdVersion();
-                } else if (SamplePom_ArtifactInheritsVersion.groupIdArtifactIdVersionPrefix().equals(groupIdArtifactIdVersionPrefix)) {
+                } else if (SamplePom_ArtifactInheritsVersion.groupIdArtifactIdVersion().equals(snapshotGroupIdArtifactIdVersion)) {
                     return SamplePom_ArtifactInheritsVersion.frozenGroupIdArtifactIdVersion();
-                } else if (SamplePom_ArtifactInheritsVersion.libraryGroupIdArtifactIdVersionPrefix().equals(groupIdArtifactIdVersionPrefix)) {
+                } else if (SamplePom_ArtifactInheritsVersion.libraryGroupIdArtifactIdVersion().equals(snapshotGroupIdArtifactIdVersion)) {
                     return SamplePom_ArtifactInheritsVersion.frozenLibraryGroupIdArtifactIdVersion();
                 }
-                throw new IllegalStateException("Not expected groupIdArtifactIdVersionPrefix : " + groupIdArtifactIdVersionPrefix);
+                throw new IllegalStateException("Not expected groupIdArtifactIdVersionPrefix : " + snapshotGroupIdArtifactIdVersion);
             }
 
             @Override
@@ -71,7 +71,7 @@ public class PomFreezerTest {
         };
 
         ByteArrayOutputStream pomOutputStream = new ByteArrayOutputStream();
-        new DefaultPomFreezer(frozenArtifactResolverDummy, new ConsoleLogger()).freeze(SamplePom_Library.asStream(), pomOutputStream);
+        new DefaultPomFreezer(frozenArtifactResolverDummy, SamplePom_ArtifactInheritsVersion.fakedStamper(), new ConsoleLogger()).freeze(SamplePom_Library.asStream(), pomOutputStream);
         String pomContent = pomOutputStream.toString();
         System.out.print(pomContent);
         Assert.assertTrue(pomContent.contains("<version>" + SamplePom_ArtifactInheritsVersion.FROZEN_VERSION + "</version>"));

@@ -1,9 +1,8 @@
 package be.fluid_it.mvn.cd.x.freeze.mapping;
 
-import be.fluid_it.mvn.cd.x.freeze.FreezeExtension;
 import be.fluid_it.mvn.cd.x.freeze.model.GroupIdArtifactIdVersion;
-import be.fluid_it.mvn.cd.x.freeze.model.GroupIdArtifactIdVersionPrefix;
 import be.fluid_it.mvn.cd.x.freeze.model.KnownElementNames;
+import be.fluid_it.mvn.cd.x.freeze.stamp.Stamper;
 import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.component.annotations.Requirement;
 import org.codehaus.plexus.logging.Logger;
@@ -21,59 +20,62 @@ import java.util.Map;
 
 @Component(role = ArtifactFreezeMapping.class)
 public class DefaultArtifactFreezeMapping implements ArtifactFreezeMapping {
-    private final Map<GroupIdArtifactIdVersionPrefix, GroupIdArtifactIdVersion> mapping = new HashMap<GroupIdArtifactIdVersionPrefix, GroupIdArtifactIdVersion>();
+    private final Map<GroupIdArtifactIdVersion, GroupIdArtifactIdVersion> mapping = new HashMap<GroupIdArtifactIdVersion, GroupIdArtifactIdVersion>();
     private boolean artifactInheritsVersionFromParent = false;
     private String artifactFrozenVersion;
 
     @Requirement
     private Logger logger;
 
+    @Requirement
+    private Stamper stamper;
+
     // PLexus
     public DefaultArtifactFreezeMapping() {
     }
     // Testing
-    DefaultArtifactFreezeMapping(Logger logger) {
+    public DefaultArtifactFreezeMapping(Stamper stamper, Logger logger) {
         this.logger = logger;
+        this.stamper = stamper;
     }
 
     @Override
-    public boolean contains(GroupIdArtifactIdVersionPrefix groupIdArtifactIdVersionPrefix) {
-        return mapping.containsKey(groupIdArtifactIdVersionPrefix);
+    public boolean contains(GroupIdArtifactIdVersion snapshotGroupIdArtifactIdVersion) {
+        return mapping.containsKey(snapshotGroupIdArtifactIdVersion);
     }
 
     @Override
-    public GroupIdArtifactIdVersion getFrozenArtifact(GroupIdArtifactIdVersionPrefix groupIdArtifactIdVersionPrefix) {
-        return mapping.get(groupIdArtifactIdVersionPrefix);
+    public GroupIdArtifactIdVersion getFrozenArtifact(GroupIdArtifactIdVersion snapshotGroupIdArtifactIdVersion) {
+        return mapping.get(snapshotGroupIdArtifactIdVersion);
     }
 
     @Override
-    public void put(GroupIdArtifactIdVersionPrefix groupIdArtifactIdVersionPrefix, GroupIdArtifactIdVersion groupIdArtifactIdVersion) {
-        mapping.put(groupIdArtifactIdVersionPrefix, groupIdArtifactIdVersion);
+    public void put(GroupIdArtifactIdVersion snapshotGroupIdArtifactIdVersion, GroupIdArtifactIdVersion frozenGroupIdArtifactIdVersion) {
+        mapping.put(snapshotGroupIdArtifactIdVersion, frozenGroupIdArtifactIdVersion);
         logger.debug("[ArtifactFreezeMapping]: Add " +
-                groupIdArtifactIdVersionPrefix +
+                snapshotGroupIdArtifactIdVersion +
                 " -> " +
-                groupIdArtifactIdVersion);
+                frozenGroupIdArtifactIdVersion);
     }
 
-    public void put(String revision, InputStream pomStream) {
-        GroupIdArtifactIdVersionPrefix pomGroupIdArtifactIdVersionPrefix = null;
-        pomGroupIdArtifactIdVersionPrefix = extractGroupIdArtifactIdVersionPrefix(pomStream);
-        GroupIdArtifactIdVersion frozenPomGroupIdArtifactIdVersion = pomGroupIdArtifactIdVersionPrefix.addRevision(revision);
-        put(pomGroupIdArtifactIdVersionPrefix, frozenPomGroupIdArtifactIdVersion);
+    public void put(InputStream pomStream) {
+        GroupIdArtifactIdVersion snapshotPomGroupIdArtifactIdVersion = extractGroupIdArtifactIdVersion(pomStream);
+        GroupIdArtifactIdVersion frozenPomGroupIdArtifactIdVersion = snapshotPomGroupIdArtifactIdVersion.freeze(stamper);
+        put(snapshotPomGroupIdArtifactIdVersion, frozenPomGroupIdArtifactIdVersion);
         logger.info("[ArtifactFreezeMapping]: Freeze the pom as artifact " + frozenPomGroupIdArtifactIdVersion);
 
     }
 
     @Override
-    public void put(String revision, File pom) {
+    public void put(File pom) {
         try {
-            put(revision, new FileInputStream(pom));
+            put(new FileInputStream(pom));
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private GroupIdArtifactIdVersionPrefix extractGroupIdArtifactIdVersionPrefix(InputStream pomStream) {
+    private GroupIdArtifactIdVersion extractGroupIdArtifactIdVersion(InputStream pomStream) {
         XMLInputFactory factory = XMLInputFactory.newInstance();
         try {
             XMLStreamReader reader =
@@ -105,9 +107,7 @@ public class DefaultArtifactFreezeMapping implements ArtifactFreezeMapping {
                 }
             }
             artifactInheritsVersionFromParent = !tree.artifactOverridesVersionFromParent();
-            GroupIdArtifactIdVersionPrefix groupIdArtifactIdVersionPrefix = tree.groupIdArtifactIdVersion().stripSnapshotPostfix();
-            artifactFrozenVersion = groupIdArtifactIdVersionPrefix.versionPrefix() + "-" + FreezeExtension.getRevision();
-            return groupIdArtifactIdVersionPrefix;
+            return tree.groupIdArtifactIdVersion();
         } catch (XMLStreamException e) {
             throw new RuntimeException(e);
         }

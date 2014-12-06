@@ -2,7 +2,7 @@ package be.fluid_it.mvn.cd.x.freeze.local;
 
 import be.fluid_it.mvn.cd.x.freeze.mapping.DefaultArtifactFreezeMapping;
 import be.fluid_it.mvn.cd.x.freeze.model.GroupIdArtifactIdVersion;
-import be.fluid_it.mvn.cd.x.freeze.model.GroupIdArtifactIdVersionPrefix;
+import be.fluid_it.mvn.cd.x.freeze.stamp.RevisionBuildNumberStamper;
 import org.codehaus.plexus.logging.console.ConsoleLogger;
 import org.junit.Assert;
 import org.junit.Before;
@@ -23,17 +23,18 @@ public class LocalRepositoryFrozenArtficactResolverTest {
                         return new File("src/test/repo");
                     }
                 },
-                new DefaultArtifactFreezeMapping()
+                new DefaultArtifactFreezeMapping(),
+                new RevisionBuildNumberStamper()
         );
     }
 
     @Test
     public void testLatestFrozenVersion() {
-        Assert.assertEquals("1.2-123", resolver.latestFrozenVersion(new String[] {"1.2-1", "1.2-12",  "1.2-123", "1.2-SNAPSHOT"}));
+        Assert.assertEquals("1.2-123-1", resolver.latestFrozenVersion(new String[] {"1.2-1-1", "1.2-12-1",  "1.2-123-1", "1.2-SNAPSHOT"}));
     }
 
     @Test
     public void test() {
-        Assert.assertEquals(new GroupIdArtifactIdVersion("be.fluid.mvn.test", "sample-artifact-id", "1.2-123"), resolver.getLatestFrozenVersion(new GroupIdArtifactIdVersionPrefix("be.fluid.mvn.test", "sample-artifact-id", "1.2")));
+        Assert.assertEquals(new GroupIdArtifactIdVersion("be.fluid.mvn.test", "sample-artifact-id", "1.2-123-1"), resolver.getLatestFrozenVersion(new GroupIdArtifactIdVersion("be.fluid.mvn.test", "sample-artifact-id", "1.2-SNAPSHOT")));
     }
 }

@@ -17,6 +17,7 @@ import java.util.Map;
 import java.util.Properties;
 
 import be.fluid_it.mvn.cd.x.freeze.FreezeExtension;
+import be.fluid_it.mvn.cd.x.freeze.stamp.Stamper;
 import org.apache.maven.*;
 import org.apache.maven.artifact.ArtifactUtils;
 import org.apache.maven.artifact.handler.manager.ArtifactHandlerManager;
@@ -86,8 +87,6 @@ import org.apache.maven.execution.MavenExecutionResult;
 import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.component.annotations.Requirement;
 import org.codehaus.plexus.logging.Logger;
-
-import static be.fluid_it.mvn.cd.x.freeze.FreezeExtension.freezingEnabled;
 
 // Issue Maven32Launcher is not sending a MavenExecutionRequest to the EventSpyDispatcher
 // Just a dirty hack to get it working until fixed in Jenkins' Maven32Launcher
@@ -561,7 +560,7 @@ public class JenkinsDefaultMaven implements Maven {
 
         if ( !localRepoDir.isDirectory() )
         {
-            throw new LocalRepositoryNotAccessibleException( "Could not create local repository at " + localRepoDir );
+            throw new LocalRepositoryNotAccessibleException( "Could not createStamp local repository at " + localRepoDir );
         }
     }
 
@@ -1067,16 +1066,18 @@ public class JenkinsDefaultMaven implements Maven {
     @Requirement
     private PomFreezer pomFreezer;
 
+    @Requirement
+    private Stamper stamper;
 
     private void freezePom(MavenExecutionRequest request) {
         // On Jenkins a MavenExecutionRequest is not triggered
         // Trigger freeze in case of Jenkins maven plugin check instance ?
-        if (freezingEnabled()) {
+        if (stamper.isEnabled()) {
             logger.info("[JenkinsDefaultMaven]: Freezing is enabled");
             File pomFile = request.getPom();
             if (!MavenConventions.FROZEN_POM_FILE.equals(pomFile.getName())) {
                 logger.info("[JenkinsDefaultMaven]: Freeze pom " + pomFile.getAbsolutePath());
-                artifactFreezeMapping.put(FreezeExtension.getRevision(), pomFile);
+                artifactFreezeMapping.put(pomFile);
                 logger.debug("[JenkinsDefaultMaven]: Freezing pom " + pomFile.getAbsolutePath());
                 request.setPom(pomFreezer.freeze(pomFile));
             }

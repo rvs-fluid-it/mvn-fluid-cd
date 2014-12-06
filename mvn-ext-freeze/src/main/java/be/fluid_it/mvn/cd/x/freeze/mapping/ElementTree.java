@@ -57,13 +57,13 @@ public class ElementTree {
 
     public void handle(String value) {
         switch (current.name) {
-            case "groupId":
+            case KnownElementNames.GROUP_ID:
                 groupIdArtifactIdVersion = groupIdArtifactIdVersion.addGroupId(value);
                 break;
-            case "artifactId":
+            case KnownElementNames.ARTIFACT_ID:
                 groupIdArtifactIdVersion = groupIdArtifactIdVersion.addArtifactId(value);
                 break;
-            case "version":
+            case KnownElementNames.VERSION:
                 if (!inParentElement) {
                     artifactOverridesVersionFromParent = true;
                 }

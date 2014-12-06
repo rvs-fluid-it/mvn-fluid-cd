@@ -3,6 +3,7 @@ package be.fluid_it.mvn.cd.x.freeze;
 import be.fluid_it.mvn.cd.x.freeze.execution.SnapshotExecutionListener;
 import be.fluid_it.mvn.cd.x.freeze.execution.TeeExecutionListener;
 import be.fluid_it.mvn.cd.x.freeze.model.MavenConventions;
+import be.fluid_it.mvn.cd.x.freeze.stamp.Stamper;
 import org.apache.maven.AbstractMavenLifecycleParticipant;
 import org.apache.maven.MavenExecutionException;
 import org.apache.maven.execution.ExecutionListener;
@@ -21,22 +22,11 @@ import java.util.List;
 public class FreezeExtension extends AbstractMavenLifecycleParticipant {
     public static final String FREEZE = "freeze";
 
-    public static final String REVISION_SYSTEM_PROPERTY = "revision";
-
-    public static boolean freezingEnabled() {
-        return System.getProperty(REVISION_SYSTEM_PROPERTY) != null;
-    }
-
-    public static String getRevision() {
-        return System.getProperty(REVISION_SYSTEM_PROPERTY);
-    }
-
-    public static void setRevision(String revision) {
-        System.setProperty(REVISION_SYSTEM_PROPERTY, revision);
-    }
-
     @Requirement
     private Logger logger;
+
+    @Requirement
+    private Stamper stamper;
 
     @Override
     public void afterSessionStart(MavenSession session)
@@ -53,7 +43,7 @@ public class FreezeExtension extends AbstractMavenLifecycleParticipant {
     public void afterProjectsRead(MavenSession session)
             throws MavenExecutionException {
         // TODO installSnapshotEnabled
-        if (freezingEnabled()) {
+        if (stamper.isEnabled()) {
             for (MavenProject project : session.getAllProjects()) {
                 for (Plugin plugin : project.getBuild().getPlugins()) {
                     List<PluginExecution> pluginExecutionClones = new LinkedList<PluginExecution>();
@@ -77,9 +67,8 @@ public class FreezeExtension extends AbstractMavenLifecycleParticipant {
             }
         }
         ExecutionListener originalExecutionListener = session.getRequest().getExecutionListener();
-        logger.info(">>>>>>> executionlistener : " + originalExecutionListener != null ? originalExecutionListener.getClass().getName() : "nil");
         session.getRequest().setExecutionListener(new TeeExecutionListener(originalExecutionListener, new SnapshotExecutionListener(logger)));
-        //session.getRequest().setExecutionListener(new TeeExecutionListener(originalExecutionListener, new MojoExecutionListener(logger)));
+        logger.info("[FreezeExtension]: " + SnapshotExecutionListener.class.getSimpleName() + " added");
     }
 
     private PluginExecution clone(PluginExecution execution) {

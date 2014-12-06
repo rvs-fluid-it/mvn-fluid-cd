@@ -2,6 +2,7 @@ package be.fluid_it.mvn.cd.x.freeze.local;
 
 import be.fluid_it.mvn.cd.x.freeze.FreezeException;
 import be.fluid_it.mvn.cd.x.freeze.FreezeExtension;
+import be.fluid_it.mvn.cd.x.freeze.stamp.Stamper;
 import org.apache.maven.eventspy.EventSpy;
 import org.apache.maven.repository.RepositorySystem;
 import org.apache.maven.settings.building.SettingsBuildingResult;
@@ -25,6 +26,9 @@ public class LocalRepositoryDirectorySpy implements EventSpy {
     @Requirement
     private Logger logger;
 
+    @Requirement
+    private Stamper stamper;
+
     @Override
     public void onEvent(Object event) throws Exception {
         if (event instanceof SettingsBuildingResult) {
@@ -39,7 +43,7 @@ public class LocalRepositoryDirectorySpy implements EventSpy {
                 this.localRepositoryDirectory = localRepositoryFile;
                 logger.info("[LocalRepositoryDirectorySpy]: LocalRepositoryDirectory is initialized to " + localRepositoryFile.getAbsolutePath());
             } else {
-                if (FreezeExtension.freezingEnabled()) {
+                if (stamper.isEnabled()) {
                     throw new FreezeException("[LocalRepositoryDirectorySpy]: Invalid local repository folder " +
                             localRepositoryPath +
                             "in effective settings");

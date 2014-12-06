@@ -1,1 +1,1 @@
-clean install -Drevision=23 -X
+clean install -Drevision=23 -DbuildNumber=1

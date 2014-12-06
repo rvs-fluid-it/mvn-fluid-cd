@@ -10,6 +10,7 @@
     <module>../mvn-ext-parent</module>
     <module>../mvn-ext-s</module>
     <module>../mvn-ext-freeze</module>
+    <module>../mvn-ext-revision-buildnumber</module>
     <module>../mvn-ext-freeze-jenkins</module>
     <module>../mvn-ext-facets</module>
     <module>../mvn-ext-steps</module>

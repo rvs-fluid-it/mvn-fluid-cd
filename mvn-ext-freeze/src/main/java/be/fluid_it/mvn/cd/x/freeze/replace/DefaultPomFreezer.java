@@ -1,7 +1,10 @@
 package be.fluid_it.mvn.cd.x.freeze.replace;
 
 import be.fluid_it.mvn.cd.x.freeze.FreezeException;
+import be.fluid_it.mvn.cd.x.freeze.mapping.ArtifactFreezeMapping;
+import be.fluid_it.mvn.cd.x.freeze.mapping.DefaultArtifactFreezeMapping;
 import be.fluid_it.mvn.cd.x.freeze.resolve.FrozenArtifactResolver;
+import be.fluid_it.mvn.cd.x.freeze.stamp.Stamper;
 import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.component.annotations.Requirement;
 import org.codehaus.plexus.logging.Logger;
@@ -25,19 +28,25 @@ public class DefaultPomFreezer implements PomFreezer {
     @Requirement
     private FrozenArtifactResolver frozenArtifactResolver;
 
+    @Requirement
+    private ArtifactFreezeMapping artifactFreezeMapping;
+
     // Plexus
     public DefaultPomFreezer() {
     }
     // Testing
-    DefaultPomFreezer(FrozenArtifactResolver frozenArtifactResolver, Logger logger) {
+    DefaultPomFreezer(FrozenArtifactResolver frozenArtifactResolver,
+                      Stamper stamper,
+                      Logger logger) {
         this.frozenArtifactResolver = frozenArtifactResolver;
         this.logger = logger;
+        this.artifactFreezeMapping = new DefaultArtifactFreezeMapping(stamper,logger);
     }
 
     public void freeze(InputStream pomInputStream, OutputStream outputStream) {
         try {
             SAXParser saxParser = factory.newSAXParser();
-            DefaultHandler handler = new FreezeHandler(outputStream, frozenArtifactResolver, logger);
+            DefaultHandler handler = new FreezeHandler(outputStream, frozenArtifactResolver, artifactFreezeMapping, logger);
             saxParser.parse(pomInputStream, handler);
         } catch (ParserConfigurationException e) {
             throw new FreezeException("Unable to parse pom", e);

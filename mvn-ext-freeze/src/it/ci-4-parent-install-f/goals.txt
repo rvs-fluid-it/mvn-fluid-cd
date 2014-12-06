@@ -1,1 +1,1 @@
-clean install -Drevision=11 -f ./pom.xml
+clean install -Drevision=11 -DbuildNumber=1 -f ./pom.xml

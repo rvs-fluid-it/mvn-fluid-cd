@@ -1,10 +1,9 @@
 package be.fluid_it.mvn.cd.x.freeze.resolve;
 
 import be.fluid_it.mvn.cd.x.freeze.model.GroupIdArtifactIdVersion;
-import be.fluid_it.mvn.cd.x.freeze.model.GroupIdArtifactIdVersionPrefix;
 
 public interface FrozenArtifactResolver {
-    GroupIdArtifactIdVersion getLatestFrozenVersion(GroupIdArtifactIdVersionPrefix groupIdArtifactIdVersionPrefix);
+    GroupIdArtifactIdVersion getLatestFrozenVersion(GroupIdArtifactIdVersion snapshotGroupIdArtifactIdVersion);
     boolean artifactInheritsVersionFromParent();
     String artifactFrozenVersion();
 }

@@ -1,6 +1,7 @@
 package be.fluid_it.mvn.cd.x.freeze.replace;
 
-import be.fluid_it.mvn.cd.x.freeze.model.GroupIdArtifactIdVersionPrefix;
+import be.fluid_it.mvn.cd.x.freeze.mapping.ArtifactFreezeMapping;
+import be.fluid_it.mvn.cd.x.freeze.model.GroupIdArtifactIdVersion;
 import be.fluid_it.mvn.cd.x.freeze.resolve.FrozenArtifactResolver;
 import org.codehaus.plexus.logging.Logger;
 import org.xml.sax.Attributes;
@@ -26,17 +27,22 @@ public class FreezeHandler extends DefaultHandler {
     private int indentLevel = 0;
     private final Writer out;
     private final FrozenArtifactResolver frozenArtifactResolver;
+    private final ArtifactFreezeMapping artifactFreezeMapping;
     private final String nl =  System.getProperty("line.separator");
 
     private boolean currentlyInLeafElement = false;
     private String currentElement = null;
     private int currentDepth = 0;
 
-    private GroupIdArtifactIdVersionPrefix currentGroupIdArtifactIdVersionPrefix = new GroupIdArtifactIdVersionPrefix();
+    private GroupIdArtifactIdVersion currentGroupIdArtifactIdVersion = new GroupIdArtifactIdVersion();
 
-    public FreezeHandler(OutputStream outputStream, FrozenArtifactResolver frozenArtifactResolver, Logger logger) {
+    public FreezeHandler(OutputStream outputStream,
+                         FrozenArtifactResolver frozenArtifactResolver,
+                         ArtifactFreezeMapping artifactFreezeMapping,
+                         Logger logger) {
         this.out = new OutputStreamWriter(outputStream);
         this.frozenArtifactResolver = frozenArtifactResolver;
+        this.artifactFreezeMapping = artifactFreezeMapping;
         this.logger = logger;
     }
 
@@ -161,7 +167,7 @@ public class FreezeHandler extends DefaultHandler {
                 break;
             case VERSION:
             default:
-                this.currentGroupIdArtifactIdVersionPrefix = new GroupIdArtifactIdVersionPrefix();
+                this.currentGroupIdArtifactIdVersion = new GroupIdArtifactIdVersion();
         }
     }
 
@@ -182,20 +188,19 @@ public class FreezeHandler extends DefaultHandler {
             if (currentElement != null) {
                 switch (currentElement) {
                     case GROUP_ID:
-                        this.currentGroupIdArtifactIdVersionPrefix = this.currentGroupIdArtifactIdVersionPrefix.addGroupId(s);
+                        this.currentGroupIdArtifactIdVersion = this.currentGroupIdArtifactIdVersion.addGroupId(s);
                         break;
                     case ARTIFACT_ID:
-                        this.currentGroupIdArtifactIdVersionPrefix = this.currentGroupIdArtifactIdVersionPrefix.addArtifactId(s);
+                        this.currentGroupIdArtifactIdVersion = this.currentGroupIdArtifactIdVersion.addArtifactId(s);
                         break;
                     case VERSION:
-                        if (this.currentGroupIdArtifactIdVersionPrefix.groupId() != null && this.currentGroupIdArtifactIdVersionPrefix.artifactId() != null) {
-                            if (s.endsWith(SNAPSHOT_POSTFIX)) {
-                                String versionPrefix = s.split(SNAPSHOT_POSTFIX)[0];
-                                this.currentGroupIdArtifactIdVersionPrefix = this.currentGroupIdArtifactIdVersionPrefix.addVersionPrefix(versionPrefix);
-                                s = this.frozenArtifactResolver.getLatestFrozenVersion(this.currentGroupIdArtifactIdVersionPrefix).version();
-                                logger.info("[Freezehandler]: " + this.currentGroupIdArtifactIdVersionPrefix + SNAPSHOT_POSTFIX +
+                        if (this.currentGroupIdArtifactIdVersion.groupId() != null && this.currentGroupIdArtifactIdVersion.artifactId() != null) {
+                            if (s.endsWith(SNAPSHOT)) {
+                                this.currentGroupIdArtifactIdVersion = this.currentGroupIdArtifactIdVersion.addVersion(s);
+                                s = this.frozenArtifactResolver.getLatestFrozenVersion(this.currentGroupIdArtifactIdVersion).version();
+                                logger.info("[Freezehandler]: " + this.currentGroupIdArtifactIdVersion +
                                         " in pom is frozen as version " + s);
-                                // TODO Add to freeze mapping for caching purposes
+                                this.artifactFreezeMapping.put(this.currentGroupIdArtifactIdVersion, this.currentGroupIdArtifactIdVersion.addVersion(s));
                             }
                         }
                     case RELATIVE_PATH:

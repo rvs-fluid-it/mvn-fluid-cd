@@ -4,6 +4,7 @@ import be.fluid_it.mvn.cd.x.freeze.FreezeException;
 import be.fluid_it.mvn.cd.x.freeze.FreezeExtension;
 import be.fluid_it.mvn.cd.x.freeze.mapping.ArtifactFreezeMapping;
 import be.fluid_it.mvn.cd.x.freeze.replace.PomFreezer;
+import be.fluid_it.mvn.cd.x.freeze.stamp.Stamper;
 import org.apache.maven.model.locator.DefaultModelLocator;
 import org.apache.maven.model.locator.ModelLocator;
 import org.codehaus.plexus.component.annotations.Component;
@@ -12,17 +13,8 @@ import org.codehaus.plexus.logging.Logger;
 
 import java.io.File;
 
-import static be.fluid_it.mvn.cd.x.freeze.FreezeExtension.freezingEnabled;
-
 @Component(role = ModelLocator.class)
 public class FreezeModelLocator implements ModelLocator {
-    static {
-        if (freezingEnabled()) {
-            System.out.println("[INFO] [FreezeExtension]: Freezing poms ...");
-        }
-    }
-
-
     @Requirement
     private Logger logger;
 
@@ -32,13 +24,16 @@ public class FreezeModelLocator implements ModelLocator {
     @Requirement
     private ArtifactFreezeMapping artifactFreezeMapping;
 
+    @Requirement
+    private Stamper stamper;
+
     @Override
     public File locatePom(File projectDirectory) {
         try {
             File pomFile = new DefaultModelLocator().locatePom(projectDirectory);
-            if (freezingEnabled()) {
+            if (stamper.isEnabled()) {
                 logger.info("[FreezeModelLocator]: Freeze pom in folder " + projectDirectory.getAbsolutePath());
-                artifactFreezeMapping.put(FreezeExtension.getRevision(), pomFile);
+                artifactFreezeMapping.put(pomFile);
                 logger.debug("[FreezeModelLocator]: Freezing pom " + pomFile.getAbsolutePath());
                 return pomFreezer.freeze(pomFile);
             } else {
@@ -46,7 +41,7 @@ public class FreezeModelLocator implements ModelLocator {
             }
         } catch (RuntimeException e) {
             throw new FreezeException("Unable to locate " +
-                    (freezingEnabled()? " frozen " : "") +
+                    (stamper.isEnabled() ? " frozen " : "") +
                     "pom in directory [" + projectDirectory + "] ...", e);
         }
     }

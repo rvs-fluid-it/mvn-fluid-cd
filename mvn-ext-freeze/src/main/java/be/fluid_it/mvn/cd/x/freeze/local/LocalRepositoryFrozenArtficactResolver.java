@@ -3,9 +3,9 @@ package be.fluid_it.mvn.cd.x.freeze.local;
 import be.fluid_it.mvn.cd.x.freeze.FreezeException;
 import be.fluid_it.mvn.cd.x.freeze.mapping.ArtifactFreezeMapping;
 import be.fluid_it.mvn.cd.x.freeze.model.GroupIdArtifactIdVersion;
-import be.fluid_it.mvn.cd.x.freeze.model.GroupIdArtifactIdVersionPrefix;
 import be.fluid_it.mvn.cd.x.freeze.model.MavenConventions;
 import be.fluid_it.mvn.cd.x.freeze.resolve.FrozenArtifactResolver;
+import be.fluid_it.mvn.cd.x.freeze.stamp.Stamper;
 import org.apache.maven.eventspy.EventSpy;
 import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.component.annotations.Requirement;
@@ -22,44 +22,51 @@ public class LocalRepositoryFrozenArtficactResolver implements FrozenArtifactRes
     @Requirement
     private ArtifactFreezeMapping artifactFreezeMapping;
 
+    @Requirement
+    private Stamper stamper;
+
     @Requirement(role = EventSpy.class, hint = LocalRepositoryDirectorySpy.HINT)
     private LocalRepositoryDirectorySpy localRepositoryDirectorySpy;
 
+    // Plexus
     public LocalRepositoryFrozenArtficactResolver() {
     }
+    // Testing
     LocalRepositoryFrozenArtficactResolver(Logger logger,
                                            LocalRepositoryDirectorySpy localRepositoryDirectorySpy,
-                                           ArtifactFreezeMapping artifactFreezeMapping) {
+                                           ArtifactFreezeMapping artifactFreezeMapping,
+                                           Stamper stamper) {
         this.logger = logger;
         this.localRepositoryDirectorySpy = localRepositoryDirectorySpy;
         this.artifactFreezeMapping = artifactFreezeMapping;
+        this.stamper = stamper;
     }
 
     @Override
-    public GroupIdArtifactIdVersion getLatestFrozenVersion(final GroupIdArtifactIdVersionPrefix groupIdArtifactIdVersionPrefix) {
-        logger.debug("[LocalRepositoryFrozenArtifactResolver]: Looking up frozen version of " + groupIdArtifactIdVersionPrefix + " ...");
-        if (artifactFreezeMapping.contains(groupIdArtifactIdVersionPrefix)) {
-            return artifactFreezeMapping.getFrozenArtifact(groupIdArtifactIdVersionPrefix);
+    public GroupIdArtifactIdVersion getLatestFrozenVersion(final GroupIdArtifactIdVersion snapshotGroupIdArtifactIdVersion) {
+        logger.debug("[LocalRepositoryFrozenArtifactResolver]: Looking up frozen version of " + snapshotGroupIdArtifactIdVersion + " ...");
+        if (artifactFreezeMapping.contains(snapshotGroupIdArtifactIdVersion)) {
+            return artifactFreezeMapping.getFrozenArtifact(snapshotGroupIdArtifactIdVersion);
         } else {
             if (localRepositoryDirectorySpy != null) {
                 if (localRepositoryDirectorySpy.localRepositoryDirectory() != null) {
                     StringBuffer artifactPathBuffer = new StringBuffer(localRepositoryDirectorySpy.localRepositoryDirectory().getAbsolutePath());
-                    artifactPathBuffer.append("/").append(groupIdArtifactIdVersionPrefix.groupId().replace(".", "/"));
-                    artifactPathBuffer.append("/").append(groupIdArtifactIdVersionPrefix.artifactId()).append("/");
+                    artifactPathBuffer.append("/").append(snapshotGroupIdArtifactIdVersion.groupId().replace(".", "/"));
+                    artifactPathBuffer.append("/").append(snapshotGroupIdArtifactIdVersion.artifactId()).append("/");
                     File artifactPath = new File(artifactPathBuffer.toString());
                     logger.debug("[LocalRepositoryFrozenArtifactResolver]: Looking for frozen version in folder " + artifactPath.getAbsolutePath());
                     if (artifactPath.exists() && artifactPath.isDirectory()) {
                         String[] versionCandidates = artifactPath.list(new FilenameFilter() {
                             @Override
                             public boolean accept(File dir, String name) {
-                                return name.startsWith(groupIdArtifactIdVersionPrefix.versionPrefix());
+                                return name.startsWith(snapshotGroupIdArtifactIdVersion.snapshotStrippedVersion());
                             }
                         });
                         logger.debug("nr of candidates : " + versionCandidates.length);
-                        return new GroupIdArtifactIdVersion(groupIdArtifactIdVersionPrefix.groupId(), groupIdArtifactIdVersionPrefix.artifactId(), latestFrozenVersion(versionCandidates));
+                        return new GroupIdArtifactIdVersion(snapshotGroupIdArtifactIdVersion.groupId(), snapshotGroupIdArtifactIdVersion.artifactId(), latestFrozenVersion(versionCandidates));
                     }
                     throw new FreezeException("[LocalRepositoryFrozenArtifactResolver]: Frozen version not found for " +
-                            groupIdArtifactIdVersionPrefix +
+                            snapshotGroupIdArtifactIdVersion +
                             " ...");
                 }
                 throw new FreezeException("[LocalRepositoryFrozenArtifactResolver]: Unknown local repository folder");
@@ -89,8 +96,8 @@ public class LocalRepositoryFrozenArtficactResolver implements FrozenArtifactRes
                 versionsText.append(versionCandidate);
                 if (latestFrozenVersion == null) {
                     latestFrozenVersion = versionCandidate;
-                } else if (!versionCandidate.endsWith(MavenConventions.SNAPSHOT_POSTFIX)) {
-                    if (isGreaterThen(versionCandidate, latestFrozenVersion)) {
+                } else if (!versionCandidate.endsWith(MavenConventions.SNAPSHOT)) {
+                    if (stamper.extract(versionCandidate).compareTo(stamper.extract(latestFrozenVersion))  > 0) {
                         latestFrozenVersion = versionCandidate;
                     }
                 }
@@ -100,19 +107,5 @@ public class LocalRepositoryFrozenArtficactResolver implements FrozenArtifactRes
         logger.debug("Version candidates: " + versionsText.toString());
         logger.debug("Latest frozen version: " + latestFrozenVersion);
         return latestFrozenVersion;
-    }
-
-    private boolean isGreaterThen(String versionToMeasure, String referenceVersion) {
-        try {
-            return extractRevision(versionToMeasure) > extractRevision(referenceVersion);
-        } catch (Exception exception) {
-            return versionToMeasure.compareTo(referenceVersion) >0;
-        }
-    }
-
-    private int extractRevision(String latestFrozenVersion) {
-        String[] frozenParts = latestFrozenVersion.split("-");
-        String frozenRevisionPart = frozenParts[frozenParts.length -1];
-        return Integer.parseInt(frozenRevisionPart);
     }
 }

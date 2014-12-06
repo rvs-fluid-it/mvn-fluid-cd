@@ -33,16 +33,6 @@
       <artifactId>maven-embedder</artifactId>
       <version>3.2.3</version>
     </dependency-->
-    <!--dependency>
-      <groupId>org.jenkins-ci.main.maven</groupId>
-      <artifactId>maven-interceptor</artifactId>
-      <version>1.6</version>
-    </dependency-->
-    <!--dependency>
-      <groupId>org.jenkins-ci.main.maven</groupId>
-      <artifactId>maven32-agent</artifactId>
-      <version>1.6</version>
-    </dependency-->
 
   </dependencies>
 

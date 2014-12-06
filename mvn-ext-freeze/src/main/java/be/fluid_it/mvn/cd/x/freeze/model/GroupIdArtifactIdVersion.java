@@ -1,5 +1,7 @@
 package be.fluid_it.mvn.cd.x.freeze.model;
 
+import be.fluid_it.mvn.cd.x.freeze.stamp.Stamper;
+
 public class GroupIdArtifactIdVersion {
     private final String groupId;
     private final String artifactId;
@@ -40,8 +42,12 @@ public class GroupIdArtifactIdVersion {
         return new GroupIdArtifactIdVersion(this.groupId, this.artifactId, version);
     }
 
-    public GroupIdArtifactIdVersionPrefix stripSnapshotPostfix() {
-        return new GroupIdArtifactIdVersionPrefix(this.groupId, this.artifactId, this.version != null ? this.version.split("-SNAPSHOT" )[0] : null);
+    public GroupIdArtifactIdVersion freeze(Stamper stamper) {
+        return new GroupIdArtifactIdVersion(this.groupId, this.artifactId, stamper.stamp(this.version));
+    }
+
+    public String snapshotStrippedVersion() {
+        return version.split(MavenConventions.SNAPSHOT)[0];
     }
 
     @Override
@@ -70,4 +76,5 @@ public class GroupIdArtifactIdVersion {
     public String toString() {
         return groupId + ":" + artifactId + ":" + version;
     }
+
 }

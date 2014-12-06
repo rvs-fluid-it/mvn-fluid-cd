@@ -1,5 +1,0 @@
-Shitty plugin is bypassing the PomLocator when forking the Maven build.
-(The plugin predates Maven 3 and is not actively maintained)
-
-Workaround:
-Let shitty start a multi module pom which points to the actual pom under test
