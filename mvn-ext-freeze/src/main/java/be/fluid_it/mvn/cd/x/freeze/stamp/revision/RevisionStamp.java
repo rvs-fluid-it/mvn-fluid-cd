@@ -1,23 +1,17 @@
-package be.fluid_it.mvn.cd.x.freeze.stamp;
+package be.fluid_it.mvn.cd.x.freeze.stamp.revision;
 
-import static be.fluid_it.mvn.cd.x.freeze.stamp.RevisionBuildNumberStamper.*;
+import be.fluid_it.mvn.cd.x.freeze.stamp.Stamp;
 
-public class RevisionBuildNumberStamp implements Stamp<RevisionBuildNumberStamp> {
+public class RevisionStamp implements Stamp<RevisionStamp> {
     private final String revision;
-    private final String buildNumber;
 
-    public RevisionBuildNumberStamp(String revision, String buildNumber) {
+    public RevisionStamp(String revision) {
         this.revision = revision;
-        this.buildNumber = buildNumber;
     }
 
     @Override
-    public int compareTo(RevisionBuildNumberStamp revisionBuildNumberStamp) {
-        int result = safeCompareTo(this.revision, revisionBuildNumberStamp.revision);
-        if (result == 0) {
-            result = safeCompareTo(this.buildNumber, revisionBuildNumberStamp.buildNumber);
-        }
-        return result;
+    public int compareTo(RevisionStamp revisionStamp) {
+        return safeCompareTo(this.revision, revisionStamp.revision);
     }
 
     private int safeCompareTo(String value, String compareToValue) {
@@ -42,19 +36,13 @@ public class RevisionBuildNumberStamp implements Stamp<RevisionBuildNumberStamp>
         return revision;
     }
 
-    public String buildNumber() {
-        return buildNumber;
-    }
-
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        RevisionBuildNumberStamp that = (RevisionBuildNumberStamp) o;
+        RevisionStamp that = (RevisionStamp) o;
 
-        if (buildNumber != null ? !buildNumber.equals(that.buildNumber) : that.buildNumber != null) return false;
         if (revision != null ? !revision.equals(that.revision) : that.revision != null) return false;
 
         return true;
@@ -62,27 +50,22 @@ public class RevisionBuildNumberStamp implements Stamp<RevisionBuildNumberStamp>
 
     @Override
     public int hashCode() {
-        int result = revision != null ? revision.hashCode() : 0;
-        result = 31 * result + (buildNumber != null ? buildNumber.hashCode() : 0);
-        return result;
+        return revision != null ? revision.hashCode() : 0;
     }
 
     @Override
     public String value(String key) {
         switch (key) {
-            case REVISION:
+            case RevisionStamper.REVISION:
                 return revision();
-            case BUILD_NUMBER:
-                return buildNumber();
         }
         return null;
     }
 
     @Override
     public String toString() {
-        return "RevisionBuildNumberStamp{" +
+        return "RevisionStamp{" +
                 "revision='" + revision + '\'' +
-                ", buildNumber='" + buildNumber + '\'' +
                 '}';
     }
 }

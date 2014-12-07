@@ -1,4 +1,6 @@
-package be.fluid_it.mvn.cd.x.freeze.stamp;
+package be.fluid_it.mvn.cd.x.freeze.stamp.revision_buildnumber;
+
+import be.fluid_it.mvn.cd.x.freeze.stamp.revision_buildnumber.RevisionBuildNumberStamp;
 
 import static org.junit.Assert.*;
 

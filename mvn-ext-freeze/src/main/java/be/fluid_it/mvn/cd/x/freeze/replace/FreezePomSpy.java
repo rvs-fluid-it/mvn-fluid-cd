@@ -4,6 +4,7 @@ import be.fluid_it.mvn.cd.x.freeze.FreezeExtension;
 import be.fluid_it.mvn.cd.x.freeze.mapping.ArtifactFreezeMapping;
 import be.fluid_it.mvn.cd.x.freeze.model.MavenConventions;
 import be.fluid_it.mvn.cd.x.freeze.stamp.Stamper;
+import be.fluid_it.mvn.cd.x.freeze.stamp.StamperSwitch;
 import org.apache.maven.eventspy.EventSpy;
 import org.apache.maven.execution.MavenExecutionRequest;
 import org.apache.maven.model.locator.ModelLocator;
@@ -30,7 +31,7 @@ public class FreezePomSpy implements EventSpy {
     private ArtifactFreezeMapping artifactFreezeMapping;
 
     @Requirement
-    private Stamper stamper;
+    private StamperSwitch stamper;
 
     @Override
     public void init(Context context) throws Exception {

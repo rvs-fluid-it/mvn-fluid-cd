@@ -2,7 +2,8 @@ package be.fluid_it.mvn.cd.x.freeze.local;
 
 import be.fluid_it.mvn.cd.x.freeze.mapping.DefaultArtifactFreezeMapping;
 import be.fluid_it.mvn.cd.x.freeze.model.GroupIdArtifactIdVersion;
-import be.fluid_it.mvn.cd.x.freeze.stamp.RevisionBuildNumberStamper;
+import be.fluid_it.mvn.cd.x.freeze.stamp.StamperSwitch;
+import be.fluid_it.mvn.cd.x.freeze.stamp.revision_buildnumber.RevisionBuildNumberStamper;
 import org.codehaus.plexus.logging.console.ConsoleLogger;
 import org.junit.Assert;
 import org.junit.Before;
@@ -24,7 +25,7 @@ public class LocalRepositoryFrozenArtficactResolverTest {
                     }
                 },
                 new DefaultArtifactFreezeMapping(),
-                new RevisionBuildNumberStamper()
+                new StamperSwitch(RevisionBuildNumberStamper.HINT,new RevisionBuildNumberStamper(), new ConsoleLogger())
         );
     }
 

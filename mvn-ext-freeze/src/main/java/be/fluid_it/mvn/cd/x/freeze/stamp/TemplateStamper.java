@@ -95,8 +95,9 @@ public abstract class TemplateStamper<S extends Stamp> implements Stamper<S> {
     @Override
     public boolean isEnabled(Properties properties) {
         for (String key : keys) {
-            if (properties.containsKey(key)) return true;
+            if (properties.containsKey(key)) continue;
+            return false;
         }
-        return false;
+        return true;
     }
 }

@@ -1,8 +1,9 @@
-package be.fluid_it.mvn.cd.x.freeze.stamp;
+package be.fluid_it.mvn.cd.x.freeze.stamp.revision_buildnumber;
 
+import be.fluid_it.mvn.cd.x.freeze.stamp.Stamper;
+import be.fluid_it.mvn.cd.x.freeze.stamp.TemplateStamper;
 import org.codehaus.plexus.component.annotations.Component;
 
-import java.util.Map;
 import java.util.Properties;
 
 @Component( role = Stamper.class, hint = RevisionBuildNumberStamper.HINT)
@@ -20,5 +21,4 @@ public class RevisionBuildNumberStamper extends TemplateStamper<RevisionBuildNum
     public RevisionBuildNumberStamp createStamp(Properties props) {
         return new RevisionBuildNumberStamp(props.getProperty(REVISION), props.getProperty(BUILD_NUMBER));
     }
-
 }

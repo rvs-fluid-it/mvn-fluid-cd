@@ -5,6 +5,7 @@ import be.fluid_it.mvn.cd.x.freeze.mapping.ArtifactFreezeMapping;
 import be.fluid_it.mvn.cd.x.freeze.mapping.DefaultArtifactFreezeMapping;
 import be.fluid_it.mvn.cd.x.freeze.resolve.FrozenArtifactResolver;
 import be.fluid_it.mvn.cd.x.freeze.stamp.Stamper;
+import be.fluid_it.mvn.cd.x.freeze.stamp.StamperSwitch;
 import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.component.annotations.Requirement;
 import org.codehaus.plexus.logging.Logger;
@@ -36,7 +37,7 @@ public class DefaultPomFreezer implements PomFreezer {
     }
     // Testing
     DefaultPomFreezer(FrozenArtifactResolver frozenArtifactResolver,
-                      Stamper stamper,
+                      StamperSwitch stamper,
                       Logger logger) {
         this.frozenArtifactResolver = frozenArtifactResolver;
         this.logger = logger;

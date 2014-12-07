@@ -3,6 +3,7 @@ package be.fluid_it.mvn.cd.x.freeze.pom;
 import be.fluid_it.mvn.cd.x.freeze.model.GroupIdArtifactIdVersion;
 import be.fluid_it.mvn.cd.x.freeze.stamp.Stamp;
 import be.fluid_it.mvn.cd.x.freeze.stamp.Stamper;
+import be.fluid_it.mvn.cd.x.freeze.stamp.StamperSwitch;
 
 import java.util.Properties;
 
@@ -45,8 +46,8 @@ public abstract class SamplePomSupport {
         return libraryGroupIdArtifactIdVersion().addVersion(LIBRARY_FROZEN_VERSION);
     }
 
-    public static Stamper fakedStamper() {
-        return new Stamper() {
+    public static StamperSwitch fakedStamper() {
+        return new StamperSwitch() {
             @Override
             public String stamp(String snapshotVersion) {
                 switch (snapshotVersion) {
@@ -56,46 +57,6 @@ public abstract class SamplePomSupport {
                         return  LIBRARY_FROZEN_VERSION;
                 }
                 throw new IllegalStateException("Unexpected snapshotVersion " + snapshotVersion + " given to faked fakedStamper.");
-            }
-
-            @Override
-            public String stamp(String snapshotVersion, Properties props) {
-                return null;
-            }
-
-            @Override
-            public Stamp createStamp() {
-                return null;
-            }
-
-            @Override
-            public Stamp createStamp(Properties properties) {
-                return null;
-            }
-
-            @Override
-            public String asString(Stamp stamp) {
-                return null;
-            }
-
-            @Override
-            public String stamp(String snapshotVersion, Stamp stamp) {
-                return null;
-            }
-
-            @Override
-            public Stamp extract(String frozenVersion) {
-                return null;
-            }
-
-            @Override
-            public boolean isEnabled(Properties properties) {
-                return false;
-            }
-
-            @Override
-            public boolean isEnabled() {
-                return false;
             }
         };
     }

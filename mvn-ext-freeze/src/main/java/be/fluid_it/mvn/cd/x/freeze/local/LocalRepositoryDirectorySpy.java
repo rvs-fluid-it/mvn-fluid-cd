@@ -3,6 +3,7 @@ package be.fluid_it.mvn.cd.x.freeze.local;
 import be.fluid_it.mvn.cd.x.freeze.FreezeException;
 import be.fluid_it.mvn.cd.x.freeze.FreezeExtension;
 import be.fluid_it.mvn.cd.x.freeze.stamp.Stamper;
+import be.fluid_it.mvn.cd.x.freeze.stamp.StamperSwitch;
 import org.apache.maven.eventspy.EventSpy;
 import org.apache.maven.repository.RepositorySystem;
 import org.apache.maven.settings.building.SettingsBuildingResult;
@@ -27,7 +28,7 @@ public class LocalRepositoryDirectorySpy implements EventSpy {
     private Logger logger;
 
     @Requirement
-    private Stamper stamper;
+    private StamperSwitch stamper;
 
     @Override
     public void onEvent(Object event) throws Exception {

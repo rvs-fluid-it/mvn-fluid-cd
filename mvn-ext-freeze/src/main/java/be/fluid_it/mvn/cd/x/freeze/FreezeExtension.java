@@ -4,6 +4,7 @@ import be.fluid_it.mvn.cd.x.freeze.execution.SnapshotExecutionListener;
 import be.fluid_it.mvn.cd.x.freeze.execution.TeeExecutionListener;
 import be.fluid_it.mvn.cd.x.freeze.model.MavenConventions;
 import be.fluid_it.mvn.cd.x.freeze.stamp.Stamper;
+import be.fluid_it.mvn.cd.x.freeze.stamp.StamperSwitch;
 import org.apache.maven.AbstractMavenLifecycleParticipant;
 import org.apache.maven.MavenExecutionException;
 import org.apache.maven.execution.ExecutionListener;
@@ -26,7 +27,7 @@ public class FreezeExtension extends AbstractMavenLifecycleParticipant {
     private Logger logger;
 
     @Requirement
-    private Stamper stamper;
+    private StamperSwitch stamper;
 
     @Override
     public void afterSessionStart(MavenSession session)

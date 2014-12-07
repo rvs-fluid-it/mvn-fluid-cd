@@ -6,6 +6,7 @@ import be.fluid_it.mvn.cd.x.freeze.model.GroupIdArtifactIdVersion;
 import be.fluid_it.mvn.cd.x.freeze.model.MavenConventions;
 import be.fluid_it.mvn.cd.x.freeze.resolve.FrozenArtifactResolver;
 import be.fluid_it.mvn.cd.x.freeze.stamp.Stamper;
+import be.fluid_it.mvn.cd.x.freeze.stamp.StamperSwitch;
 import org.apache.maven.eventspy.EventSpy;
 import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.component.annotations.Requirement;
@@ -23,7 +24,7 @@ public class LocalRepositoryFrozenArtficactResolver implements FrozenArtifactRes
     private ArtifactFreezeMapping artifactFreezeMapping;
 
     @Requirement
-    private Stamper stamper;
+    private StamperSwitch stamper;
 
     @Requirement(role = EventSpy.class, hint = LocalRepositoryDirectorySpy.HINT)
     private LocalRepositoryDirectorySpy localRepositoryDirectorySpy;
@@ -35,7 +36,7 @@ public class LocalRepositoryFrozenArtficactResolver implements FrozenArtifactRes
     LocalRepositoryFrozenArtficactResolver(Logger logger,
                                            LocalRepositoryDirectorySpy localRepositoryDirectorySpy,
                                            ArtifactFreezeMapping artifactFreezeMapping,
-                                           Stamper stamper) {
+                                           StamperSwitch stamper) {
         this.logger = logger;
         this.localRepositoryDirectorySpy = localRepositoryDirectorySpy;
         this.artifactFreezeMapping = artifactFreezeMapping;

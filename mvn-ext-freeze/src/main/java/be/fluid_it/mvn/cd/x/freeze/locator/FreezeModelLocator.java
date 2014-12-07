@@ -5,6 +5,7 @@ import be.fluid_it.mvn.cd.x.freeze.FreezeExtension;
 import be.fluid_it.mvn.cd.x.freeze.mapping.ArtifactFreezeMapping;
 import be.fluid_it.mvn.cd.x.freeze.replace.PomFreezer;
 import be.fluid_it.mvn.cd.x.freeze.stamp.Stamper;
+import be.fluid_it.mvn.cd.x.freeze.stamp.StamperSwitch;
 import org.apache.maven.model.locator.DefaultModelLocator;
 import org.apache.maven.model.locator.ModelLocator;
 import org.codehaus.plexus.component.annotations.Component;
@@ -25,7 +26,7 @@ public class FreezeModelLocator implements ModelLocator {
     private ArtifactFreezeMapping artifactFreezeMapping;
 
     @Requirement
-    private Stamper stamper;
+    private StamperSwitch stamper;
 
     @Override
     public File locatePom(File projectDirectory) {

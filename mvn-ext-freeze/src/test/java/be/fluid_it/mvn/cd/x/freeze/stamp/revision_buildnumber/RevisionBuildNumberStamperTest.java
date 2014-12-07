@@ -1,13 +1,13 @@
-package be.fluid_it.mvn.cd.x.freeze.stamp;
+package be.fluid_it.mvn.cd.x.freeze.stamp.revision_buildnumber;
 
 import be.fluid_it.mvn.cd.x.freeze.model.MavenConventions;
+import be.fluid_it.mvn.cd.x.freeze.stamp.revision_buildnumber.RevisionBuildNumberStamp;
+import be.fluid_it.mvn.cd.x.freeze.stamp.revision_buildnumber.RevisionBuildNumberStamper;
 import org.junit.Test;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Properties;
 
-import static be.fluid_it.mvn.cd.x.freeze.stamp.RevisionBuildNumberStamper.*;
+import static be.fluid_it.mvn.cd.x.freeze.stamp.revision_buildnumber.RevisionBuildNumberStamper.*;
 import static org.junit.Assert.*;
 
 public class RevisionBuildNumberStamperTest {

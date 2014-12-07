@@ -3,6 +3,7 @@ package be.fluid_it.mvn.cd.x.freeze.mapping;
 import be.fluid_it.mvn.cd.x.freeze.model.GroupIdArtifactIdVersion;
 import be.fluid_it.mvn.cd.x.freeze.model.KnownElementNames;
 import be.fluid_it.mvn.cd.x.freeze.stamp.Stamper;
+import be.fluid_it.mvn.cd.x.freeze.stamp.StamperSwitch;
 import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.component.annotations.Requirement;
 import org.codehaus.plexus.logging.Logger;
@@ -28,13 +29,13 @@ public class DefaultArtifactFreezeMapping implements ArtifactFreezeMapping {
     private Logger logger;
 
     @Requirement
-    private Stamper stamper;
+    private StamperSwitch stamper;
 
     // PLexus
     public DefaultArtifactFreezeMapping() {
     }
     // Testing
-    public DefaultArtifactFreezeMapping(Stamper stamper, Logger logger) {
+    public DefaultArtifactFreezeMapping(StamperSwitch stamper, Logger logger) {
         this.logger = logger;
         this.stamper = stamper;
     }

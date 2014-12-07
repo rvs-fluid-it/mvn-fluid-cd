@@ -18,6 +18,7 @@ import java.util.Properties;
 
 import be.fluid_it.mvn.cd.x.freeze.FreezeExtension;
 import be.fluid_it.mvn.cd.x.freeze.stamp.Stamper;
+import be.fluid_it.mvn.cd.x.freeze.stamp.StamperSwitch;
 import org.apache.maven.*;
 import org.apache.maven.artifact.ArtifactUtils;
 import org.apache.maven.artifact.handler.manager.ArtifactHandlerManager;
@@ -1067,7 +1068,7 @@ public class JenkinsDefaultMaven implements Maven {
     private PomFreezer pomFreezer;
 
     @Requirement
-    private Stamper stamper;
+    private StamperSwitch stamper;
 
     private void freezePom(MavenExecutionRequest request) {
         // On Jenkins a MavenExecutionRequest is not triggered
