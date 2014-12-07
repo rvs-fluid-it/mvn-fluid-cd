@@ -75,16 +75,20 @@ public class StamperSwitch implements Stamper {
 
     private Stamper selectedStamper() {
         if (selectedStamper == null) {
-            int nrOfKeys = 0;
             String hintSelectedStamper = null;
             for (String hint : stampers.keySet()) {
                 Stamper stamper = stampers.get(hint);
-                if (stamper.isEnabled() && stamper instanceof TemplateStamper && ((TemplateStamper)stamper).keys().size() > nrOfKeys) {
-                    this.selectedStamper = stamper;
+                if (stamper.isEnabled() &&
+                        stamper instanceof TemplateStamper &&
+                        (selectedStamper == null || ((TemplateStamper)stamper).keys().size() > ((TemplateStamper)selectedStamper).keys().size())) {
+                    logger.info("[StamperSwitch]: Found enabled " + hint + " stamper activated by " +
+                            ((TemplateStamper)stamper).keys().size() +
+                            " cmdline option(s)" );
+                    selectedStamper = stamper;
                     hintSelectedStamper = hint;
                 }
             }
-            logger.info("[StamperSwitch]: Selected " + hintSelectedStamper + " as stamper.");
+            if (selectedStamper != null) logger.info("[StamperSwitch]: Selected " + hintSelectedStamper + " as stamper.");
         }
         return selectedStamper;
     }

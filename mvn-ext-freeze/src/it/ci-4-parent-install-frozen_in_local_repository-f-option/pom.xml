@@ -6,7 +6,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>be.fluid-it.mvn.cd.it</groupId>
-  <artifactId>sample-parent</artifactId>
+  <artifactId>sample-parent-only-revision</artifactId>
   <version>1.2-SNAPSHOT</version>
   <packaging>pom</packaging>
 
