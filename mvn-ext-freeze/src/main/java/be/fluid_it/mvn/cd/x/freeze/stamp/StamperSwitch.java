@@ -1,5 +1,6 @@
 package be.fluid_it.mvn.cd.x.freeze.stamp;
 
+import be.fluid_it.mvn.cd.x.freeze.model.MavenConventions;
 import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.component.annotations.Requirement;
 import org.codehaus.plexus.logging.Logger;
@@ -32,6 +33,11 @@ public class StamperSwitch implements Stamper {
     @Override
     public String stamp(String snapshotVersion) {
         return selectedStamper().stamp(snapshotVersion);
+    }
+
+    @Override
+    public String unfreeze(String frozenVersion) {
+        return selectedStamper.unfreeze(frozenVersion);
     }
 
     @Override

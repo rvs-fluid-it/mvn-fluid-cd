@@ -10,16 +10,20 @@ import java.util.Properties;
 public abstract class SamplePomSupport {
     public static final String GROUP_ID = "be.fluid-it.tools.mvn.cd";
     public static final String ARTIFACT_ID = "sample-artifact-id";
-    public static final String PARENT_ARTIFACT_ID = "parent-sample-artifact-id";
     public static final String VERSION_PREFIX = "0.1";
+
+    public static final String PARENT_ARTIFACT_ID = "parent-sample-artifact-id";
+    public static final String PARENT_STAMP = "123-1";
+    public static final String PARENT_FROZEN_VERSION = VERSION_PREFIX + "-" + PARENT_STAMP;
+
     public static final String VERSION = VERSION_PREFIX + "-SNAPSHOT";
-    public static final String STAMP = "123-1";
+    public static final String STAMP = "234-2";
     public static final String FROZEN_VERSION = VERSION_PREFIX + "-" + STAMP;
     public static final String LIBRARY_GROUP_ID = "be.fluid-it.tools.mvn.cd.library";
     public static final String LIBRARY_ARTIFACT_ID = "sample-library-artifact-id";
     public static final String LIBRARY_VERSION_PREFIX = "1.2";
     public static final String LIBRARY_VERSION = LIBRARY_VERSION_PREFIX + "-SNAPSHOT";
-    public static final String LIBRARY_STAMP = "234-1";
+    public static final String LIBRARY_STAMP = "345-3";
     public static final String LIBRARY_FROZEN_VERSION = LIBRARY_VERSION_PREFIX + "-" + LIBRARY_STAMP;
 
     public static GroupIdArtifactIdVersion parentGroupIdArtifactIdVersion() {
@@ -35,7 +39,7 @@ public abstract class SamplePomSupport {
     }
 
     public static GroupIdArtifactIdVersion frozenParentGroupIdArtifactIdVersion() {
-        return parentGroupIdArtifactIdVersion().addVersion(FROZEN_VERSION);
+        return parentGroupIdArtifactIdVersion().addVersion(PARENT_FROZEN_VERSION);
     }
 
     public static GroupIdArtifactIdVersion frozenGroupIdArtifactIdVersion() {
@@ -53,8 +57,6 @@ public abstract class SamplePomSupport {
                 switch (snapshotVersion) {
                     case VERSION:
                         return FROZEN_VERSION;
-                    case LIBRARY_VERSION:
-                        return  LIBRARY_FROZEN_VERSION;
                 }
                 throw new IllegalStateException("Unexpected snapshotVersion " + snapshotVersion + " given to faked fakedStamper.");
             }

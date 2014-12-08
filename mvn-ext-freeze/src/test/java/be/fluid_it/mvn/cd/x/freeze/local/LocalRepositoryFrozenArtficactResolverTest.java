@@ -24,8 +24,8 @@ public class LocalRepositoryFrozenArtficactResolverTest {
                         return new File("src/test/repo");
                     }
                 },
-                new DefaultArtifactFreezeMapping(),
-                new StamperSwitch(RevisionBuildNumberStamper.HINT,new RevisionBuildNumberStamper(), new ConsoleLogger())
+                new DefaultArtifactFreezeMapping(null, new ConsoleLogger()),
+                new StamperSwitch(RevisionBuildNumberStamper.HINT,new RevisionBuildNumberStamper(new ConsoleLogger()), new ConsoleLogger())
         );
     }
 

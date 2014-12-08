@@ -68,7 +68,7 @@ public class FreezeExtension extends AbstractMavenLifecycleParticipant {
             }
         }
         ExecutionListener originalExecutionListener = session.getRequest().getExecutionListener();
-        session.getRequest().setExecutionListener(new TeeExecutionListener(originalExecutionListener, new SnapshotExecutionListener(logger)));
+        session.getRequest().setExecutionListener(new TeeExecutionListener(originalExecutionListener, new SnapshotExecutionListener(logger, stamper)));
         logger.info("[FreezeExtension]: " + SnapshotExecutionListener.class.getSimpleName() + " added");
     }
 

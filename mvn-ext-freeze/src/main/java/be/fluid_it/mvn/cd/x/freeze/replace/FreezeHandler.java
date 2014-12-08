@@ -27,7 +27,6 @@ public class FreezeHandler extends DefaultHandler {
     private int indentLevel = 0;
     private final Writer out;
     private final FrozenArtifactResolver frozenArtifactResolver;
-    private final ArtifactFreezeMapping artifactFreezeMapping;
     private final String nl =  System.getProperty("line.separator");
 
     private boolean currentlyInLeafElement = false;
@@ -38,11 +37,9 @@ public class FreezeHandler extends DefaultHandler {
 
     public FreezeHandler(OutputStream outputStream,
                          FrozenArtifactResolver frozenArtifactResolver,
-                         ArtifactFreezeMapping artifactFreezeMapping,
                          Logger logger) {
         this.out = new OutputStreamWriter(outputStream);
         this.frozenArtifactResolver = frozenArtifactResolver;
-        this.artifactFreezeMapping = artifactFreezeMapping;
         this.logger = logger;
     }
 
@@ -156,6 +153,7 @@ public class FreezeHandler extends DefaultHandler {
         if (frozenArtifactResolver.artifactInheritsVersionFromParent() &&
             ARTIFACT_ID.equals(qualifiedName) &&
             currentDepth == 1) {
+            logger.info("[Freezehandler]: Artifact version " + frozenArtifactResolver.artifactFrozenVersion());
             write(nl + indentation + "<" + VERSION + ">" + frozenArtifactResolver.artifactFrozenVersion() + "</" + VERSION + ">");
         }
         switch (qualifiedName) {
@@ -200,7 +198,6 @@ public class FreezeHandler extends DefaultHandler {
                                 s = this.frozenArtifactResolver.getLatestFrozenVersion(this.currentGroupIdArtifactIdVersion).version();
                                 logger.info("[Freezehandler]: " + this.currentGroupIdArtifactIdVersion +
                                         " in pom is frozen as version " + s);
-                                this.artifactFreezeMapping.put(this.currentGroupIdArtifactIdVersion, this.currentGroupIdArtifactIdVersion.addVersion(s));
                             }
                         }
                     case RELATIVE_PATH:

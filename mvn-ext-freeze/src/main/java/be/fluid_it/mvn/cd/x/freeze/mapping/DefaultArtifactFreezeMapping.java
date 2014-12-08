@@ -53,7 +53,7 @@ public class DefaultArtifactFreezeMapping implements ArtifactFreezeMapping {
     @Override
     public void put(GroupIdArtifactIdVersion snapshotGroupIdArtifactIdVersion, GroupIdArtifactIdVersion frozenGroupIdArtifactIdVersion) {
         mapping.put(snapshotGroupIdArtifactIdVersion, frozenGroupIdArtifactIdVersion);
-        logger.debug("[ArtifactFreezeMapping]: Add " +
+        logger.info("[ArtifactFreezeMapping]: Add " +
                 snapshotGroupIdArtifactIdVersion +
                 " -> " +
                 frozenGroupIdArtifactIdVersion);
@@ -63,8 +63,8 @@ public class DefaultArtifactFreezeMapping implements ArtifactFreezeMapping {
         GroupIdArtifactIdVersion snapshotPomGroupIdArtifactIdVersion = extractGroupIdArtifactIdVersion(pomStream);
         GroupIdArtifactIdVersion frozenPomGroupIdArtifactIdVersion = snapshotPomGroupIdArtifactIdVersion.freeze(stamper);
         put(snapshotPomGroupIdArtifactIdVersion, frozenPomGroupIdArtifactIdVersion);
+        artifactFrozenVersion = frozenPomGroupIdArtifactIdVersion.version();
         logger.info("[ArtifactFreezeMapping]: Freeze the pom as artifact " + frozenPomGroupIdArtifactIdVersion);
-
     }
 
     @Override

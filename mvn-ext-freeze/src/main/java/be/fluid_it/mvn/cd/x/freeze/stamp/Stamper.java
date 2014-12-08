@@ -5,6 +5,7 @@ import java.util.Properties;
 
 public interface Stamper<S extends Stamp> {
     String stamp(String snapshotVersion);
+    String unfreeze(String frozenVersion);
     String stamp(String snapshotVersion, Properties props);
     S createStamp();
     S createStamp(Properties properties);

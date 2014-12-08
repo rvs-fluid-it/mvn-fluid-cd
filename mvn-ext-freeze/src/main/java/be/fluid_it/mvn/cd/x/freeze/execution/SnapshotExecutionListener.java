@@ -1,6 +1,7 @@
 package be.fluid_it.mvn.cd.x.freeze.execution;
 
 import be.fluid_it.mvn.cd.x.freeze.model.MavenConventions;
+import be.fluid_it.mvn.cd.x.freeze.stamp.Stamper;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.ArtifactUtils;
 import org.apache.maven.execution.AbstractExecutionListener;
@@ -14,14 +15,16 @@ import java.util.List;
 
 public class SnapshotExecutionListener extends AbstractExecutionListener {
     private final Logger logger;
+    private final Stamper stamper;
 
     private Artifact frozenArtifact;
     private File frozenPomFile;
     private String frozenFinalName;
     private List<Artifact> frozenAttachedArtifacts;
 
-    public SnapshotExecutionListener(final Logger logger) {
+    public SnapshotExecutionListener(final Logger logger, final Stamper stamper) {
         this.logger = logger;
+        this.stamper = stamper;
     }
 
     private boolean isPomArtifact(MavenProject project) {
@@ -38,40 +41,40 @@ public class SnapshotExecutionListener extends AbstractExecutionListener {
 
             frozenArtifact = event.getProject().getArtifact();
             Artifact snapshotArtifact = ArtifactUtils.copyArtifact(frozenArtifact);
-            snapshotArtifact.setVersion(transformToSnapshot(frozenArtifact.getVersion()));
+            snapshotArtifact.setVersion(transformToSnapshotVersion(frozenArtifact.getVersion()));
             event.getProject().setArtifact(snapshotArtifact);
 
             if (!isPomArtifact(event.getProject())) {
                 frozenFinalName = event.getProject().getBuild().getFinalName();
-                event.getProject().getBuild().setFinalName(transformToSnapshot(frozenFinalName));
+                event.getProject().getBuild().setFinalName(transformToSnapshot(frozenFinalName, frozenArtifact, snapshotArtifact));
 
-                event.getProject().getArtifact().setFile(new File(transformToSnapshot(frozenArtifact.getFile().getAbsolutePath()) + ".jar"));
-                logger.info("Switched frozenArtifact file to " + transformToSnapshot(frozenArtifact.getFile().getAbsolutePath()) + ".jar");
+                event.getProject().getArtifact().setFile(new File(transformToSnapshot(frozenArtifact.getFile().getAbsolutePath(), frozenArtifact, snapshotArtifact)));
+                logger.info("[SnapshotExecutionListener]: Switched frozenArtifact file to " + transformToSnapshot(frozenArtifact.getFile().getAbsolutePath(), frozenArtifact, snapshotArtifact));
             }
             frozenAttachedArtifacts = new LinkedList<Artifact>();
 
             for (Artifact attachedArtifact : event.getProject().getAttachedArtifacts()) {
                 String attachedFileAbsolutePath = attachedArtifact.getFile().getAbsolutePath();
-                logger.info(">>>> Attached frozenArtifact file : " + attachedFileAbsolutePath);
+                logger.info("[SnapshotExecutionListener]: Attached frozenArtifact file : " + attachedFileAbsolutePath);
                 frozenAttachedArtifacts.add(attachedArtifact);
             }
             event.getProject().getAttachedArtifacts().clear();
             for (Artifact frozenAttachedArtifact : frozenAttachedArtifacts) {
                 Artifact unfrozenAttachedArtifact = ArtifactUtils.copyArtifact(frozenAttachedArtifact);
-                unfrozenAttachedArtifact.setVersion(transformToSnapshot(unfrozenAttachedArtifact.getVersion()));
+                unfrozenAttachedArtifact.setVersion(transformToSnapshot(unfrozenAttachedArtifact.getVersion(), frozenArtifact, snapshotArtifact));
                 event.getProject().addAttachedArtifact(unfrozenAttachedArtifact);
             }
         }
     }
 
-    private String transformToSnapshot(String data) {
-        String[] parts = data.split("-");
-        StringBuffer result = new StringBuffer();
-        for (int i = 0; i < parts.length -1; i++) {
-            result.append(parts[i]).append("-");
-        }
-        return result.append("SNAPSHOT").toString();
+    private String transformToSnapshotVersion(String frozenVersion) {
+        return stamper.unfreeze(frozenVersion);
     }
+
+    private String transformToSnapshot(String data, Artifact frozenArtifact, Artifact snapshotArtifact) {
+        return data.replace(frozenArtifact.getVersion(), snapshotArtifact.getVersion());
+    }
+
 
     @Override
     public void mojoSucceeded( ExecutionEvent event ) {

@@ -3,6 +3,7 @@ package be.fluid_it.mvn.cd.x.freeze.stamp.revision_buildnumber;
 import be.fluid_it.mvn.cd.x.freeze.model.MavenConventions;
 import be.fluid_it.mvn.cd.x.freeze.stamp.revision_buildnumber.RevisionBuildNumberStamp;
 import be.fluid_it.mvn.cd.x.freeze.stamp.revision_buildnumber.RevisionBuildNumberStamper;
+import org.codehaus.plexus.logging.console.ConsoleLogger;
 import org.junit.Test;
 
 import java.util.Properties;
@@ -23,17 +24,31 @@ public class RevisionBuildNumberStamperTest {
 
     @Test
     public void createStampFromProperties() {
-        assertEquals(new RevisionBuildNumberStamp(THE_REVISION, THE_BUILD_NUMBER), new RevisionBuildNumberStamper().createStamp(PROPS));
+        assertEquals(new RevisionBuildNumberStamp(THE_REVISION, THE_BUILD_NUMBER), revisionBuildNumberStamper().createStamp(PROPS));
+    }
+
+    private RevisionBuildNumberStamper revisionBuildNumberStamper() {
+        return new RevisionBuildNumberStamper(new ConsoleLogger());
     }
 
     @Test
     public void stamp() {
-        assertEquals(THE_MAJOR_MINOR_REVISION + "-" + THE_REVISION + "-" + THE_BUILD_NUMBER, new RevisionBuildNumberStamper().stamp(THE_MAJOR_MINOR_REVISION + "-" + MavenConventions.SNAPSHOT, PROPS));
+        assertEquals(THE_MAJOR_MINOR_REVISION + "-" + THE_REVISION + "-" + THE_BUILD_NUMBER, revisionBuildNumberStamper().stamp(THE_MAJOR_MINOR_REVISION + "-" + MavenConventions.SNAPSHOT, PROPS));
     }
 
     @Test
     public void extract() {
-        assertEquals(new RevisionBuildNumberStamp(THE_REVISION, THE_BUILD_NUMBER), new RevisionBuildNumberStamper().extract(THE_MAJOR_MINOR_REVISION + "-" + THE_REVISION + "-" + THE_BUILD_NUMBER));
+        assertEquals(new RevisionBuildNumberStamp(THE_REVISION, THE_BUILD_NUMBER), revisionBuildNumberStamper().extract(THE_MAJOR_MINOR_REVISION + "-" + THE_REVISION + "-" + THE_BUILD_NUMBER));
+    }
+
+    @Test
+    public void asStamp() {
+        assertEquals(THE_REVISION + "-" + THE_BUILD_NUMBER, revisionBuildNumberStamper().asString(new RevisionBuildNumberStamp(THE_REVISION, THE_BUILD_NUMBER)));
+    }
+
+    @Test
+    public void unFreeze() {
+        assertEquals(THE_MAJOR_MINOR_REVISION + "-" + MavenConventions.SNAPSHOT, revisionBuildNumberStamper().unfreeze(THE_MAJOR_MINOR_REVISION + "-" + THE_REVISION + "-" + THE_BUILD_NUMBER));
     }
 
     @Test
@@ -43,7 +58,7 @@ public class RevisionBuildNumberStamperTest {
 
     @Test
     public void isEnabled() {
-        assertTrue(new RevisionBuildNumberStamper().isEnabled(PROPS));
-        assertFalse(new RevisionBuildNumberStamper().isEnabled(new Properties()));
+        assertTrue(revisionBuildNumberStamper().isEnabled(PROPS));
+        assertFalse(revisionBuildNumberStamper().isEnabled(new Properties()));
     }
 }

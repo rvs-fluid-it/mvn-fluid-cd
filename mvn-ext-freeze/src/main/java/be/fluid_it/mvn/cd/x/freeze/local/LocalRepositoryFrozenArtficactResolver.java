@@ -5,6 +5,7 @@ import be.fluid_it.mvn.cd.x.freeze.mapping.ArtifactFreezeMapping;
 import be.fluid_it.mvn.cd.x.freeze.model.GroupIdArtifactIdVersion;
 import be.fluid_it.mvn.cd.x.freeze.model.MavenConventions;
 import be.fluid_it.mvn.cd.x.freeze.resolve.FrozenArtifactResolver;
+import be.fluid_it.mvn.cd.x.freeze.stamp.Stamp;
 import be.fluid_it.mvn.cd.x.freeze.stamp.Stamper;
 import be.fluid_it.mvn.cd.x.freeze.stamp.StamperSwitch;
 import org.apache.maven.eventspy.EventSpy;
@@ -45,9 +46,13 @@ public class LocalRepositoryFrozenArtficactResolver implements FrozenArtifactRes
 
     @Override
     public GroupIdArtifactIdVersion getLatestFrozenVersion(final GroupIdArtifactIdVersion snapshotGroupIdArtifactIdVersion) {
-        logger.debug("[LocalRepositoryFrozenArtifactResolver]: Looking up frozen version of " + snapshotGroupIdArtifactIdVersion + " ...");
+        logger.info("[LocalRepositoryFrozenArtifactResolver]: Looking up frozen version of " + snapshotGroupIdArtifactIdVersion + " ...");
         if (artifactFreezeMapping.contains(snapshotGroupIdArtifactIdVersion)) {
-            return artifactFreezeMapping.getFrozenArtifact(snapshotGroupIdArtifactIdVersion);
+            GroupIdArtifactIdVersion frozenArtifact = artifactFreezeMapping.getFrozenArtifact(snapshotGroupIdArtifactIdVersion);
+            logger.info("[LocalRepositoryFrozenArtifactResolver]: Found frozen artifact " +
+                    frozenArtifact +
+                    " for " + snapshotGroupIdArtifactIdVersion + " in map ...");
+            return frozenArtifact;
         } else {
             if (localRepositoryDirectorySpy != null) {
                 if (localRepositoryDirectorySpy.localRepositoryDirectory() != null) {
@@ -55,7 +60,7 @@ public class LocalRepositoryFrozenArtficactResolver implements FrozenArtifactRes
                     artifactPathBuffer.append("/").append(snapshotGroupIdArtifactIdVersion.groupId().replace(".", "/"));
                     artifactPathBuffer.append("/").append(snapshotGroupIdArtifactIdVersion.artifactId()).append("/");
                     File artifactPath = new File(artifactPathBuffer.toString());
-                    logger.debug("[LocalRepositoryFrozenArtifactResolver]: Looking for frozen version in folder " + artifactPath.getAbsolutePath());
+                    logger.info("[LocalRepositoryFrozenArtifactResolver]: Looking for frozen version in folder " + artifactPath.getAbsolutePath());
                     if (artifactPath.exists() && artifactPath.isDirectory()) {
                         String[] versionCandidates = artifactPath.list(new FilenameFilter() {
                             @Override
@@ -63,8 +68,13 @@ public class LocalRepositoryFrozenArtficactResolver implements FrozenArtifactRes
                                 return name.startsWith(snapshotGroupIdArtifactIdVersion.snapshotStrippedVersion());
                             }
                         });
-                        logger.debug("nr of candidates : " + versionCandidates.length);
-                        return new GroupIdArtifactIdVersion(snapshotGroupIdArtifactIdVersion.groupId(), snapshotGroupIdArtifactIdVersion.artifactId(), latestFrozenVersion(versionCandidates));
+                        logger.info("nr of candidates : " + versionCandidates.length);
+                        GroupIdArtifactIdVersion frozenArtifact = new GroupIdArtifactIdVersion(snapshotGroupIdArtifactIdVersion.groupId(), snapshotGroupIdArtifactIdVersion.artifactId(), latestFrozenVersion(versionCandidates));
+                        logger.info("[LocalRepositoryFrozenArtifactResolver]: Found frozen artifact " +
+                                frozenArtifact +
+                                " for " + snapshotGroupIdArtifactIdVersion + " in local repository ...");
+                        artifactFreezeMapping.put(snapshotGroupIdArtifactIdVersion, frozenArtifact);
+                        return frozenArtifact;
                     }
                     throw new FreezeException("[LocalRepositoryFrozenArtifactResolver]: Frozen version not found for " +
                             snapshotGroupIdArtifactIdVersion +
@@ -95,10 +105,11 @@ public class LocalRepositoryFrozenArtficactResolver implements FrozenArtifactRes
                     versionsText.append(", ");
                 }
                 versionsText.append(versionCandidate);
-                if (latestFrozenVersion == null) {
+                if (latestFrozenVersion == null && stamper.extract(versionCandidate) != null) {
                     latestFrozenVersion = versionCandidate;
                 } else if (!versionCandidate.endsWith(MavenConventions.SNAPSHOT)) {
-                    if (stamper.extract(versionCandidate).compareTo(stamper.extract(latestFrozenVersion))  > 0) {
+                    Stamp stampVersionCandidate = stamper.extract(versionCandidate);
+                    if (stampVersionCandidate != null && stampVersionCandidate.compareTo(stamper.extract(latestFrozenVersion))  > 0) {
                         latestFrozenVersion = versionCandidate;
                     }
                 }

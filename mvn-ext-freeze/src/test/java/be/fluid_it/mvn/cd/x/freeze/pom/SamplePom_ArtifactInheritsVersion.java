@@ -21,6 +21,7 @@ public class SamplePom_ArtifactInheritsVersion extends SamplePomSupport {
                 "    <relativePath>../" + PARENT_ARTIFACT_ID + "/pom.xml</relativePath>\n" +
                 "  </parent>\n" +
                 "  <artifactId>" + ARTIFACT_ID + "</artifactId>\n" +
+                "  <packaging>jar</packaging>\n" +
                 "  <dependencies>\n" +
                 "    <dependency>\n" +
                 "      <groupId>" + LIBRARY_GROUP_ID + "</groupId>\n" +

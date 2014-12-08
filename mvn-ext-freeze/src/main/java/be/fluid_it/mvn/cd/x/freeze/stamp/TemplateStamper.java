@@ -1,12 +1,14 @@
 package be.fluid_it.mvn.cd.x.freeze.stamp;
 
 import be.fluid_it.mvn.cd.x.freeze.model.MavenConventions;
+import be.fluid_it.mvn.cd.x.freeze.util.LoggerProvider;
+import org.codehaus.plexus.logging.Logger;
 
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public abstract class TemplateStamper<S extends Stamp> implements Stamper<S> {
+public abstract class TemplateStamper<S extends Stamp> implements Stamper<S>, LoggerProvider {
     public static final String PLACEHOLDER_START = "\\$\\{";
     public static final String PLACEHOLDER_END = "\\}";
     public final static String PLACEHOLDER_EXP = PLACEHOLDER_START + "(.+?)" + PLACEHOLDER_END;
@@ -32,7 +34,11 @@ public abstract class TemplateStamper<S extends Stamp> implements Stamper<S> {
     public String asString(S stamp) {
         String result = template;
         for (String key : keys) {
+             logger().info("[TemplateStamper]: result = " + result +
+                     " ,key = " + key +
+                      ", stamp = " + stamp);
              String value = stamp.value(key);
+             logger().info("[TemplateStamper]: value = " + value);
              result = result.replaceAll(PLACEHOLDER_START + key + PLACEHOLDER_END, value);
         }
         return result;
@@ -59,14 +65,15 @@ public abstract class TemplateStamper<S extends Stamp> implements Stamper<S> {
     @Override
     public String stamp(String snapshotVersion, S stamp) {
         if (snapshotVersion.endsWith(MavenConventions.SNAPSHOT)) {
-            String snapshotStrippedVersion = snapshotVersion.split(MavenConventions.SNAPSHOT)[0];
-            return snapshotStrippedVersion + asString(stamp);
+            return snapshotVersion.split(MavenConventions.SNAPSHOT)[0] + asString(stamp);
         }
         return snapshotVersion;
     }
 
     @Override
     public S extract(String frozenVersion) {
+        if (frozenVersion.endsWith(MavenConventions.SNAPSHOT)) return null;
+        logger().info("[TemplateStamper]: Extracting stamp from " + frozenVersion);
         Properties props = new Properties();
         Pattern pattern = Pattern.compile("-" +
                 template.replaceAll(PLACEHOLDER_EXP, "(.+?)") +
@@ -80,7 +87,13 @@ public abstract class TemplateStamper<S extends Stamp> implements Stamper<S> {
                 groupIndex++;
             }
         }
-        return createStamp(props);
+        return props.size() > 0 ? createStamp(props) : null;
+    }
+
+    @Override
+    public String unfreeze(String frozenVersion) {
+        S stamp = extract(frozenVersion);
+        return stamp != null ? frozenVersion.replace(asString(stamp), MavenConventions.SNAPSHOT) : frozenVersion;
     }
 
     public Set<String> keys() {

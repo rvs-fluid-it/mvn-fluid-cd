@@ -47,7 +47,7 @@ public class DefaultPomFreezer implements PomFreezer {
     public void freeze(InputStream pomInputStream, OutputStream outputStream) {
         try {
             SAXParser saxParser = factory.newSAXParser();
-            DefaultHandler handler = new FreezeHandler(outputStream, frozenArtifactResolver, artifactFreezeMapping, logger);
+            DefaultHandler handler = new FreezeHandler(outputStream, frozenArtifactResolver, logger);
             saxParser.parse(pomInputStream, handler);
         } catch (ParserConfigurationException e) {
             throw new FreezeException("Unable to parse pom", e);
