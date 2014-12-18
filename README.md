@@ -8,13 +8,15 @@ mvn-fluid-cd
 
 ## Problem statement (Anno 2014)
 ![Problem statement](http://www.hydroflex-technology.com/lab/wp-content/uploads/2013/04/broken-surfboard-thumb.jpg)
-> Continuously delivering [microservices](http://martinfowler.com/articles/microservices.html) built by Maven is tough and painful. 
+
+__Continuously delivering [microservices](http://martinfowler.com/articles/microservices.html) built by Maven is tough and painful.__ 
 
 * [Technology radar October 2012 - Thoughtworks](http://www.thoughtworks.com/radar/tools/maven)
-
 > Maven has long been a staple of build automation in the Java space. However, given its lack of flexibility and support for automation best practices, especially in the Continuous Delivery domain, the use of alternatives such as Gradle should be considered.
 
 * [Evil (Maven) Snapshots - Halil-Cem Gürsoy](http://bed-con.org/2014/files/slides/evil_snapshots-bedcon2014.pdf)
+
+__Programming in the CI/CD tool is hard to scale.__ 
 
 * [Technology radar January 2015 Preview - Thoughtworks](http://www.thoughtworks.com/radar/techniques)
 > A common pre-requisite for doing continuous integration has been to have a single command that could be executed on a clone of your repository on a brand new machine to get a working environment which can build, test and package your application. This focuses the attention on automation, makes it easy for new users to get started, reduces chances of snowflake build environments and results in reliable build results that can be recreated on demand either in the CI environment or locally. However, we often see teams ignoring this and resorting to __programming in their CI/CD tool__, which not only results in build failures that are hard to debug, they also lose out on the upstream benefits of having the single point of entry to configuring and building their projects. In this version of the radar, we would like to strongly advise against this practice which sacrifices many of the benefits of CI in the interest of expediency.
