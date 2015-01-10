@@ -28,6 +28,7 @@ __Programming in the CI/CD tool is hard to scale.__
 * [Continuous delivery friendly Maven versions (MNG-5576) -> Fixed - Jason van Zyl](https://jira.codehaus.org/browse/MNG-5576)
 * [Real-world strategies for continuous delivery with Maven and Jenkins - John Ferguson Smart](http://www.slideshare.net/wakaleo/continuous-deliverywithmaven)
 * [Takari generations - Jason van Zyl](http://www.slideshare.net/Takari_io/takari-1)
+* [Continuous Delivery for Microservices with Jenkins and the Job DSL Plugin](https://blog.codecentric.de/en/2015/01/continuous-delivery-microservices-jenkins-job-dsl-plugin/#more-25860)
 
 
 ## Bringing back the joy
