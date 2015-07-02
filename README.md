@@ -6,6 +6,8 @@ mvn-fluid-cd
 ============
 [Maven](http://maven.apache.org) extension(s) to facilitate [continuous delivery](http://martinfowler.com/books/continuousDelivery.html) of [microservices](http://martinfowler.com/articles/microservices.html)
 
+[![Build Status](https://api.travis-ci.org/rvs-fluid-it/mvn-fluid-cd.svg)](https://travis-ci.org/rvs-fluid-it/mvn-fluid-cd)
+
 ## Problem statement (Anno 2014)
 ![Problem statement](http://www.hydroflex-technology.com/lab/wp-content/uploads/2013/04/broken-surfboard-thumb.jpg)
 
