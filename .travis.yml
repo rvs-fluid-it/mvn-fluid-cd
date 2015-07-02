@@ -1,4 +1,4 @@
-sudo: true
+sudo: false
 language: java
 jdk:
   - oraclejdk7
@@ -6,4 +6,4 @@ jdk:
 before_script:
    - cd mvn-ext-s-modules
 script:
-   - sudo mvn clean install
+   - mvn clean test
