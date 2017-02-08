@@ -6,6 +6,8 @@ mvn-fluid-cd
 ============
 [Maven](http://maven.apache.org) extension(s) to facilitate [continuous delivery](http://martinfowler.com/books/continuousDelivery.html) of [microservices](http://martinfowler.com/articles/microservices.html)
 
+[![Build Status](https://api.travis-ci.org/rvs-fluid-it/mvn-fluid-cd.svg)](https://travis-ci.org/rvs-fluid-it/mvn-fluid-cd)
+
 ## Problem statement (Anno 2014)
 ![Problem statement](http://www.hydroflex-technology.com/lab/wp-content/uploads/2013/04/broken-surfboard-thumb.jpg)
 
@@ -28,6 +30,7 @@ __Programming in the CI/CD tool is hard to scale.__
 * [Continuous delivery friendly Maven versions (MNG-5576) -> Fixed - Jason van Zyl](https://jira.codehaus.org/browse/MNG-5576)
 * [Real-world strategies for continuous delivery with Maven and Jenkins - John Ferguson Smart](http://www.slideshare.net/wakaleo/continuous-deliverywithmaven)
 * [Takari generations - Jason van Zyl](http://www.slideshare.net/Takari_io/takari-1)
+* [Continuous Delivery for Microservices with Jenkins and the Job DSL Plugin](https://blog.codecentric.de/en/2015/01/continuous-delivery-microservices-jenkins-job-dsl-plugin/#more-25860)
 
 
 ## Bringing back the joy
