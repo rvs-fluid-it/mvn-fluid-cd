@@ -9,5 +9,5 @@
     <relativePath>../mvn-ext-parent/pom.xml</relativePath>
   </parent>
   <artifactId>mvn-ext-s</artifactId>
-  <description>Maven extension to group multiple extensions in a chain of responsibility flavor</description>
+  <description>Maven extension to group multiple extensions in a chain of responsibility style</description>
 </project>
